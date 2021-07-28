@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.0.2...v4.1.0) - 2021-07-27
+
+- 🧰 Support for `lazyImages` to add `loading="lazy"` [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) params on `<img>` tags
+- 🎁 Update `markdown-it` to v12.1.0
+- 🎁 Update dev dependencies
+
 ## [4.0.2](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.0.0...v4.0.2) - 2020-01-19
 
 - 🛠 Fix Table of Contents on headers that contained other tags:
