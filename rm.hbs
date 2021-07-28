@@ -79,6 +79,9 @@ Configuration outside of registration events and Uttori specific items is avalia
     // Open external domains in a new window.
     openNewWindow: true,
 
+    // Add lazy loading params to image tags.
+    lazyImages: true,
+
     // Table of Contents
     toc: {
       // The opening DOM tag for the TOC container.
