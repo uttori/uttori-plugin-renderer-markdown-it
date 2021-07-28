@@ -1,3 +1,5 @@
+declare module '@uttori/plugin-renderer-markdown-it';
+
 declare module "markdown-it-plugin" {
     export = Plugin;
     function Plugin(md: any, pluginOptions?: object): object;
@@ -40,16 +42,17 @@ declare module "index" {
         quotes?: string;
         highlight?: Function;
         uttori?: {
-            baseUrl: string;
-            allowedExternalDomains: string[];
-            openNewWindow: boolean;
-            toc: {
-                openingTag: string;
-                closingTag: string;
-                slugify: object;
+            baseUrl?: string;
+            allowedExternalDomains?: string[];
+            openNewWindow?: boolean;
+            lazyImages?: boolean;
+            toc?: {
+                openingTag?: string;
+                closingTag?: string;
+                slugify?: object;
             };
-            wikilinks: {
-                slugify: object;
+            wikilinks?: {
+                slugify?: object;
             };
         };
     };

@@ -1,3 +1,4 @@
+/** @type {Function} */
 let debug = () => {}; try { debug = require('debug')('Uttori.Plugin.Render.MarkdownIt'); } catch {}
 const MarkdownIt = require('markdown-it');
 const slugify = require('slugify');
@@ -17,6 +18,7 @@ const markdownItPlugin = require('./markdown-it-plugin');
  * @property {string} [uttori.baseUrl=''] Prefix for relative URLs, useful when the Express app is not at URI root.
  * @property {string[]} [uttori.allowedExternalDomains=[]] Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org).
  * @property {boolean} [uttori.openNewWindow=true] Open external domains in a new window.
+ * @property {boolean} [uttori.lazyImages=true] Add lazy loading params to image tags.
  * @property {object} [uttori.toc={}] Table of Contents settings.
  * @property {string} [uttori.toc.openingTag='<nav class&#61;"table-of-contents">'] The opening DOM tag for the TOC container.
  * @property {string} [uttori.toc.closingTag='</nav>'] The closing DOM tag for the TOC container.
@@ -67,6 +69,7 @@ class MarkdownItRenderer {
         baseUrl: '',
         allowedExternalDomains: [],
         openNewWindow: true,
+        lazyImages: true,
         toc: {
           openingTag: '<nav class="table-of-contents">',
           closingTag: '</nav>',

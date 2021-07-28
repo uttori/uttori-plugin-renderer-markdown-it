@@ -117,7 +117,6 @@ function Plugin(md, pluginOptions = {}) {
     let indent_level = 0;
 
     // Reduce the headers down into a string of the TOC
-    // eslint-disable-next-line unicorn/no-array-reduce
     const list = headings.reduce((accumulator, heading) => {
       // Increase / Decrease depth of nesting
       if (heading.level > indent_level) {
@@ -298,6 +297,12 @@ function Plugin(md, pluginOptions = {}) {
         // https://markdown-it.github.io/markdown-it/#Token
         blockToken.children.forEach((token) => {
           switch (token.type) {
+            case 'image': {
+              if (options.lazyImages) {
+                updateValue(token, 'loading', 'lazy');
+              }
+              break;
+            }
             case 'link_open': {
               const href = getValue(token, 'href');
               /* istanbul ignore else */

@@ -114,7 +114,7 @@ test('MarkdownItRenderer.renderContent(content, context): throws error without a
 });
 
 test('MarkdownItRenderer.renderContent(content, context): can accept a config', (t) => {
-  t.is(MarkdownItRenderer.renderContent('![test](/test.png)', { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }), '<p><img src="/test.png" alt="test" /></p>');
+  t.is(MarkdownItRenderer.renderContent('![test](/test.png)', { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }), '<p><img src="/test.png" alt="test" loading="lazy" /></p>');
 });
 
 test('MarkdownItRenderer.renderCollection(collection, context): throws error without a config', (t) => {
@@ -124,7 +124,7 @@ test('MarkdownItRenderer.renderCollection(collection, context): throws error wit
 });
 
 test('MarkdownItRenderer.renderCollection(collection, context): can accept a config', (t) => {
-  t.deepEqual(MarkdownItRenderer.renderCollection([{ html: '![test](/test.png)' }], { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }), [{ html: '<p><img src="/test.png" alt="test" /></p>' }]);
+  t.deepEqual(MarkdownItRenderer.renderCollection([{ html: '![test](/test.png)' }], { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }), [{ html: '<p><img src="/test.png" alt="test" loading="lazy" /></p>' }]);
 });
 
 test('MarkdownItRenderer.render(content, config): handles empty values', (t) => {
@@ -333,4 +333,16 @@ test('MarkdownItRenderer.render(content, config): can render a WikiLink with a b
   const markdown = 'A deep [[Link]]';
   const output = '<p>A deep <a href="/wiki/link">Link</a></p>';
   t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, baseUrl: '/wiki' } }), output);
+});
+
+test('MarkdownItRenderer.render(content, config): can render an Image with lazy loading', (t) => {
+  const markdown = '![](example.png "image title")';
+  const output = '<p><img src="example.png" alt="" title="image title" loading="lazy"></p>';
+  t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: true } }), output);
+});
+
+test('MarkdownItRenderer.render(content, config): can render an Image without lazy loading', (t) => {
+  const markdown = '![](example.png "image title")';
+  const output = '<p><img src="example.png" alt="" title="image title"></p>';
+  t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
 });
