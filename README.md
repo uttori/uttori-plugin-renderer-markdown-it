@@ -116,6 +116,13 @@ Configuration outside of registration events and Uttori specific items is avalia
 </dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#debug">debug()</a> : <code>function</code></dt>
+<dd></dd>
+</dl>
+
 ## Typedefs
 
 <dl>
@@ -292,6 +299,10 @@ Renders Markdown for a provided string with a provided MarkdownIt configuration.
 ```js
 const html = MarkdownItRenderer.render(content, config);
 ```
+<a name="debug"></a>
+
+## debug() : <code>function</code>
+**Kind**: global function  
 <a name="MarkdownItRendererOptions"></a>
 
 ## MarkdownItRendererOptions : <code>object</code>
@@ -312,6 +323,7 @@ const html = MarkdownItRenderer.render(content, config);
 | [uttori.baseUrl] | <code>string</code> | <code>&quot;&#x27;&#x27;&quot;</code> | Prefix for relative URLs, useful when the Express app is not at URI root. |
 | [uttori.allowedExternalDomains] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
 | [uttori.openNewWindow] | <code>boolean</code> | <code>true</code> | Open external domains in a new window. |
+| [uttori.lazyImages] | <code>boolean</code> | <code>true</code> | Add lazy loading params to image tags. |
 | [uttori.toc] | <code>object</code> | <code>{}</code> | Table of Contents settings. |
 | [uttori.toc.openingTag] | <code>string</code> | <code>&quot;&#x27;&lt;nav class&amp;#61;\&quot;table-of-contents\&quot;&gt;&#x27;&quot;</code> | The opening DOM tag for the TOC container. |
 | [uttori.toc.closingTag] | <code>string</code> | <code>&quot;&#x27;&lt;/nav&gt;&#x27;&quot;</code> | The closing DOM tag for the TOC container. |

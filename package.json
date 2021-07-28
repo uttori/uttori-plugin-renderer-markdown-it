@@ -27,12 +27,11 @@
   "devDependencies": {
     "ava": "^3.15.0",
     "coveralls": "^3.1.1",
-    "docsify-cli": "^4.4.3",
     "eslint": "^7.31.0",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-ava": "^11.0.0",
+    "eslint-plugin-ava": "^12.0.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsdoc": "^31.0.8",
+    "eslint-plugin-jsdoc": "^36.0.5",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-node": "^11.1.0",
@@ -43,7 +42,7 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-xss": "^0.1.10",
     "jsdoc": "^3.6.7",
-    "jsdoc-to-markdown": "^6.0.1",
+    "jsdoc-to-markdown": "^7.0.1",
     "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
     "release-it": "^14.10.1",
@@ -95,8 +94,7 @@
     }
   },
   "scripts": {
-    "docs": "jsdoc2md --private --example-lang js --template rm.hbs src/index.js > README.md; jsdoc2md --private --example-lang js src/index.js > docs/render-markdownit.md;  jsdoc2md --private --example-lang js src/markdown-it-plugin.js > docs/markdown-it-plugin.md",
-    "docs-serve": "docsify init ./docs && docsify serve ./docs",
+    "docs": "jsdoc2md --private --example-lang js --template rm.hbs --files src/index.js > README.md; jsdoc2md --private --example-lang js --files src/index.js > docs/render-markdownit.md; jsdoc2md --private --example-lang js --files src/markdown-it-plugin.js > docs/markdown-it-plugin.md",
     "lint": "eslint .",
     "make-types": "rm -fr types/ && mkdir types && tsc --project .tsconfig.json",
     "release": "release-it",
