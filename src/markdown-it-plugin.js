@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const MarkdownIt = require('markdown-it');
 const StateInline = require('markdown-it/lib/rules_inline/state_inline');
 const StateCore = require('markdown-it/lib/rules_core/state_core');
@@ -262,6 +263,78 @@ function Plugin(md, pluginOptions = {}) {
     state.pos = (newline !== -1) ? newline : state.pos + state.posMax + 1;
 
     return true;
+  });
+
+  md.core.ruler.after('block', 'youtube', (state) => {
+    const tokens = state.tokens;
+
+    // Keep track of paragraph tags to remove.
+    const toRemove = [];
+    for (let i = tokens.length - 1; i >= 0; i--) {
+      const currentToken = tokens[i];
+      if (currentToken.type !== 'inline') continue;
+
+      // Does it start with "<youtube" and seem real?
+      const youtubeRegExp = new RegExp(/<youtube\s[^>]*?(v|start|width|height|title)=["']([^"']*?)["'][^>]*?>/g);
+      if (!youtubeRegExp.test(currentToken.content)) continue;
+
+      // Found a tag
+      toRemove.push(i);
+
+      // Pull the parts out of the tag:
+      // <youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
+      const parts = [...currentToken.content.matchAll(/\s+(v|start|width|height|title)=('[^']*'|"[^"]*")?/g)];
+      const keys = parts.reduce((output, item) => {
+        output[item[1]] = item[2].replace(/["']+/g, '');
+        return output;
+      }, {});
+      const { v, width = 560, height = 315, title = '', start = 0 } = keys;
+
+      // Build the tokens
+      const nodes = [];
+      let level = currentToken.level;
+
+      let token = new state.Token('div_open', 'div', 1);
+      token.attrs = [['class', 'youtube-embed']];
+      token.level = level++;
+      nodes.push(token);
+
+      token = new state.Token('iframe_open', 'iframe', 1);
+      token.attrs = [
+        ['class', 'youtube-embed-video'],
+        ['width', width],
+        ['height', height],
+        ['src', `https://www.youtube-nocookie.com/embed/${v}?start=${start}`],
+        ['title', title],
+        ['frameborder', 0],
+        ['allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'],
+        ['allowfullscreen', true],
+      ];
+      nodes.push(token);
+      token = new state.Token('iframe_close', 'iframe', -1);
+      nodes.push(token);
+
+      token = new state.Token('div_close', 'div', -1);
+      token.level = --level;
+      nodes.push(token);
+
+      // Remove closing P tag
+      tokens.splice(i - 1, 1);
+      // Replace inline content with new tags
+      state.tokens = md.utils.arrayReplaceAt(tokens, i, nodes);
+      // Remove opening P tag
+      state.tokens.splice(i + 4, 1);
+    }
+
+    // Clean up P tags, the starting offset will be the opening DIV tag.
+    // toRemove.sort((a, b) => b - a).forEach((i) => {
+    //   // Remove closing P tag
+    //   state.tokens.splice(i + 5, 1);
+    //   // Remove old inline content
+    //   state.tokens.splice(i + 3, 1);
+    //   // Remove opening P
+    //   state.tokens.splice(i - 1, 1);
+    // });
   });
 
   /**
