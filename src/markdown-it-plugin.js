@@ -331,16 +331,6 @@ function Plugin(md, pluginOptions = {}) {
       // Remove opening P tag
       state.tokens.splice(i + 4, 1);
     }
-
-    // Clean up P tags, the starting offset will be the opening DIV tag.
-    // toRemove.sort((a, b) => b - a).forEach((i) => {
-    //   // Remove closing P tag
-    //   state.tokens.splice(i + 5, 1);
-    //   // Remove old inline content
-    //   state.tokens.splice(i + 3, 1);
-    //   // Remove opening P
-    //   state.tokens.splice(i - 1, 1);
-    // });
   });
 
   /**
