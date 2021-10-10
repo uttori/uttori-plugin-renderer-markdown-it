@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.1](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.2.0...v4.2.1) - 2021-10-10
+
+- 🛠 Fix YouTube embeds sloppy code for replacing opening & closing P tags
+
 ## [4.2.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.1.0...v4.2.0) - 2021-10-10
 
 - 🧰 Support for `<youtube v="">` to generate YouTube iframe embeds

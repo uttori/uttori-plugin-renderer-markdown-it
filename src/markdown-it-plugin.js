@@ -272,10 +272,9 @@ function Plugin(md, pluginOptions = {}) {
    * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
    */
   md.core.ruler.after('block', 'youtube', (state) => {
-    const tokens = state.tokens;
+    let tokens = state.tokens;
 
-    // Keep track of paragraph tags to remove.
-    const toRemove = [];
+    // Loop through all the tokens looking for ones to replace.
     for (let i = tokens.length - 1; i >= 0; i--) {
       const currentToken = tokens[i];
       if (currentToken.type !== 'inline') continue;
@@ -283,9 +282,6 @@ function Plugin(md, pluginOptions = {}) {
       // Does it start with "<youtube" and seem real?
       const youtubeRegExp = new RegExp(/<youtube\s[^>]*?(v|start|width|height|title)=["']([^"']*?)["'][^>]*?>/g);
       if (!youtubeRegExp.test(currentToken.content)) continue;
-
-      // Found a tag
-      toRemove.push(i);
 
       // Pull the parts out of the tag:
       // <youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
@@ -325,11 +321,20 @@ function Plugin(md, pluginOptions = {}) {
       nodes.push(token);
 
       // Remove closing P tag
-      tokens.splice(i - 1, 1);
+      const closing = new state.Token('text', '', 0);
+      closing.content = '\n';
+      tokens = md.utils.arrayReplaceAt(tokens, i + 1, [closing]);
+
       // Replace inline content with new tags
-      state.tokens = md.utils.arrayReplaceAt(tokens, i, nodes);
+      tokens = md.utils.arrayReplaceAt(tokens, i, nodes);
+
       // Remove opening P tag
-      state.tokens.splice(i + 4, 1);
+      const opening = new state.Token('text', '', 0);
+      opening.content = '';
+      tokens = md.utils.arrayReplaceAt(tokens, i - 1, [opening]);
+
+      // Update State
+      state.tokens = tokens;
     }
   });
 
