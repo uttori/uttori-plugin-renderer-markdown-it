@@ -346,3 +346,15 @@ test('MarkdownItRenderer.render(content, config): can render an Image without la
   const output = '<p><img src="example.png" alt="" title="image title"></p>';
   t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
 });
+
+test('MarkdownItRenderer.render(content, config): can render a YouTube video', (t) => {
+  const markdown = '<youtube v="aR3fVuLEtj8" width="560" height="315" title="YouTube Video Player" start="0">';
+  const output = '<div class="youtube-embed"><iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe></div>';
+  t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
+});
+
+test('MarkdownItRenderer.render(content, config): can render a YouTube video with only a v tag', (t) => {
+  const markdown = '<youtube v="aR3fVuLEtj8">';
+  const output = '<div class="youtube-embed"><iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe></div>';
+  t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
+});
