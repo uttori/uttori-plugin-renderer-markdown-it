@@ -265,6 +265,12 @@ function Plugin(md, pluginOptions = {}) {
     return true;
   });
 
+  /**
+   * Find and replace the <youtube> tags with safe iframes.
+   *
+   * @param {StateInline} state State of MarkdownIt.
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
+   */
   md.core.ruler.after('block', 'youtube', (state) => {
     const tokens = state.tokens;
 

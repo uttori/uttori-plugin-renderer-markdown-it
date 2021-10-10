@@ -19,7 +19,7 @@ This also includes a MarkdownIt plugin you can use seperately that supports:
 * Properly handle external domains with `noopener noreferrer` and optionally set up allowed domains for `nofollow` SEO support to curb spam
 * Support for [WikiLinks](https://en.wikipedia.org/wiki/Help:Link#Wikilinks_(internal_links)) style linking
 * Support for adding [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) tags to `img` tags
-* Support for adding YouTube embeds
+* Support for adding YouTube iframe videos
 
 ## Install
 
@@ -107,6 +107,81 @@ Configuration outside of registration events and Uttori specific items is avalia
     },
   },
 }
+```
+
+### Table of Contents Generation
+
+You can generate a table of contents based on the headers in a file. Example:
+
+```md
+# First
+## Second
+### Third
+### Third Again
+#### Fouth
+
+## Second Again
+### Third Last
+Content
+
+[toc]
+```
+
+Will render to a minified version of:
+
+```html
+<p>
+  <nav class="table-of-contents">
+    <ul class="table-of-contents-h1">
+      <li><a href="#first-0" title="First">First</a></li>
+      <ul class="table-of-contents-h2">
+        <li><a href="#second-1" title="Second">Second</a></li>
+        <ul class="table-of-contents-h3">
+          <li><a href="#third-2" title="Third">Third</a></li>
+          <li><a href="#third-again-3" title="Third Again">Third Again</a></li>
+          <ul class="table-of-contents-h4">
+            <li><a href="#fouth-4" title="Fouth">Fouth</a></li>
+          </ul>
+        </ul>
+        <li><a href="#second-again-6" title="Second Again">Second Again</a></li>
+        <ul class="table-of-contents-h3">
+          <li><a href="#third-last-7" title="Third Last">Third Last</a></li>
+        </ul>
+      </ul>
+    </ul>
+  </nav>
+  Content Content
+</p>
+```
+
+### YouTube Embedding
+
+This allows safe embedding of YouTube videos. Example:
+
+```md
+<youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
+```
+
+Will render to a minified version of:
+
+```html
+<div class="youtube-embed">
+  <iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="YouTube Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+</div>
+```
+
+The only required parameter is `v`:
+
+```md
+<youtube v="aR3fVuLEtj8">
+```
+
+Will render to a minified version of:
+
+```html
+<div class="youtube-embed">
+  <iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+</div>
 ```
 
 * * *
