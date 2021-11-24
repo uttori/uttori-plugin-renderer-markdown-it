@@ -4,6 +4,8 @@ const StateInline = require('markdown-it/lib/rules_inline/state_inline');
 const StateCore = require('markdown-it/lib/rules_core/state_core');
 const Token = require('markdown-it/lib/token');
 const slugify = require('slugify');
+const Renderer = require('markdown-it/lib/renderer');
+const { footnoteDefinition, footnoteReferences } = require('./footnotes');
 
 /**
  * @param {Token} token The MarkdownIt token we are reading.
@@ -157,7 +159,7 @@ function Plugin(md, pluginOptions = {}) {
    * Converts WikiLinks to anchor tags.
    *
    * @param {StateInline} state State of MarkdownIt.
-   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.before|Ruler.before}
    */
   md.inline.ruler.before('link', 'wikilink', (state) => {
     const max = state.posMax;
@@ -280,7 +282,7 @@ function Plugin(md, pluginOptions = {}) {
       if (currentToken.type !== 'inline') continue;
 
       // Does it start with "<youtube" and seem real?
-      const youtubeRegExp = new RegExp(/<youtube\s[^>]*?(v|start|width|height|title)=["']([^"']*?)["'][^>]*?>/g);
+      const youtubeRegExp = /<youtube\s[^>]*?(v|start|width|height|title)=["']([^"']*?)["'][^>]*?>/g;
       if (!youtubeRegExp.test(currentToken.content)) continue;
 
       // Pull the parts out of the tag:
@@ -342,7 +344,6 @@ function Plugin(md, pluginOptions = {}) {
    * Caches the headers for use in building the TOC body.
    *
    * @param {StateCore} state State of MarkdownIt.
-   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
    */
   md.core.ruler.push('collect_headers', (state) => {
     // Create a mapping of all the headers, their indentation level, content and slug.
@@ -414,6 +415,56 @@ function Plugin(md, pluginOptions = {}) {
 
     return false;
   });
+
+  /**
+   * Creates the tag for the Footnote reference.
+   *
+   * @param {Token[]} tokens Collection of tokens to render.
+   * @param {number} index The index of the current token in the Tokens array.
+   * @param {object} _opts Option parameters of the parser instance.
+   * @param {object} _env Additional data from parsed input (references, for example).
+   * @param {Renderer} _slf The current parser instance.
+   * @returns {string} The tag for the Footnote reference.
+   */
+  md.renderer.rules.footnote_ref = (tokens, index, _opts, _env, _slf) => options.footnotes.referenceTag(tokens[index].meta);
+
+  /**
+   * Creates the opening tag of the Footnote items block.
+   *
+   * @param {Token[]} tokens Collection of tokens to render.
+   * @param {number} index The index of the current token in the Tokens array.
+   * @param {object} _opts Option parameters of the parser instance.
+   * @param {object} _env Additional data from parsed input (references, for example).
+   * @param {Renderer} _slf The current parser instance.
+   * @returns {string} The opening tag of the Footnote items block.
+   */
+  md.renderer.rules.footnote_open = (tokens, index, _opts, _env, _slf) => options.footnotes.definitionOpenTag(tokens[index].meta);
+
+  /**
+   * Creates the closing tag of the Footnote items block.
+   *
+   * @param {Token[]} _tokens Collection of tokens to render.
+   * @param {number} _index The index of the current token in the Tokens array.
+   * @param {object} _opts Option parameters of the parser instance.
+   * @param {object} _env Additional data from parsed input (references, for example).
+   * @param {Renderer} _slf The current parser instance.
+   * @returns {string} The closing tag of the Footnote section block.
+   */
+  md.renderer.rules.footnote_close = (_tokens, _index, _opts, _env, _slf) => options.footnotes.definitionCloseTag;
+
+  /**
+   * Converts Footnote definitions to linkable anchor tags.
+   *
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.before|Ruler.before}
+   */
+  md.block.ruler.before('reference', 'footnote_def', footnoteDefinition, { alt: ['paragraph', 'reference'] });
+
+  /**
+   * Process footnote references such as [^...]
+   *
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
+   */
+  md.inline.ruler.after('image', 'footnote_ref', footnoteReferences);
 
   return this;
 }

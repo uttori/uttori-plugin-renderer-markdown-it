@@ -1,8 +1,20 @@
 declare module '@uttori/plugin-renderer-markdown-it';
 
+declare module "footnotes" {
+    export function footnoteDefinition(state: StateBlock, startLine: number, endLine: number, silent: boolean): boolean;
+    export function footnoteReferences(state: StateInline, silent: boolean): boolean;
+    export function referenceTag({ id, label }: {
+        id: number;
+        label: string;
+    }): string;
+    export function definitionOpenTag({ id, label }: {
+        id: number;
+        label: string;
+    }): string;
+}
 declare module "markdown-it-plugin" {
     export = Plugin;
-    function Plugin(md: any, pluginOptions?: object): object;
+    function Plugin(md: MarkdownIt, pluginOptions?: object): object;
 }
 declare module "index" {
     export = MarkdownItRenderer;
@@ -46,6 +58,11 @@ declare module "index" {
             allowedExternalDomains?: string[];
             openNewWindow?: boolean;
             lazyImages?: boolean;
+            footnotes?: {
+                referenceTag?: Function;
+                definitionOpenTag?: Function;
+                definitionCloseTag?: string;
+            };
             toc?: {
                 openingTag?: string;
                 closingTag?: string;
