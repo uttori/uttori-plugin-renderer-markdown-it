@@ -125,13 +125,13 @@ function Plugin(md, pluginOptions = {}) {
       if (heading.level > indent_level) {
         const level_diff = (heading.level - indent_level);
         for (let i = 0; i < level_diff; i++) {
-          accumulator += `<ul class="table-of-contents-h${heading.level}">`;
+          accumulator += `<li><ul class="table-of-contents-h${heading.level}">`;
           indent_level++;
         }
       } else if (heading.level < indent_level) {
         const level_diff = (indent_level - heading.level);
         for (let i = 0; i < level_diff; i++) {
-          accumulator += '</ul>';
+          accumulator += '</ul></li>';
           indent_level--;
         }
       }
@@ -141,18 +141,20 @@ function Plugin(md, pluginOptions = {}) {
     }, '');
 
     // Add the ending tags at the number of indent levels nested
-    let output = `${list}${'</ul>'.repeat(indent_level)}`;
+    let output = `${list}${'</ul></li>'.repeat(indent_level)}`;
 
     // Remove empty nesting levels that result from missing levels, such as no H1 or H2 tags.
-    while (output.includes('<ul class="table-of-contents-h2"><ul')) {
-      output = output.replace('<ul class="table-of-contents-h2"><ul', '<ul');
-      output = output.replace('</ul></ul>', '</ul>');
+    while (output.includes('<ul class="table-of-contents-h2"><li><ul')) {
+      output = output.replace('<ul class="table-of-contents-h2"><li><ul', '<ul');
+      output = output.replace('</ul></li></ul>', '</ul>');
     }
-    while (output.includes('<ul class="table-of-contents-h3"><ul')) {
-      output = output.replace('<ul class="table-of-contents-h3"><ul', '<ul');
-      output = output.replace('</ul></ul>', '</ul>');
+    while (output.includes('<ul class="table-of-contents-h3"><li><ul')) {
+      output = output.replace('<ul class="table-of-contents-h3"><li><ul', '<ul');
+      output = output.replace('</ul></li></ul>', '</ul>');
     }
-    return output;
+
+    // Remove first & last LI tags
+    return output.slice(0, -5).slice(4);
   };
 
   /**
