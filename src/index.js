@@ -3,6 +3,7 @@ let debug = () => {}; try { debug = require('debug')('Uttori.Plugin.Render.Markd
 const MarkdownIt = require('markdown-it');
 const slugify = require('slugify');
 const markdownItPlugin = require('./markdown-it-plugin');
+const { referenceTag, definitionOpenTag } = require('./footnotes');
 
 /**
  * @typedef {object} MarkdownItRendererOptions
@@ -19,6 +20,10 @@ const markdownItPlugin = require('./markdown-it-plugin');
  * @property {string[]} [uttori.allowedExternalDomains=[]] Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org).
  * @property {boolean} [uttori.openNewWindow=true] Open external domains in a new window.
  * @property {boolean} [uttori.lazyImages=true] Add lazy loading params to image tags.
+ * @property {object} [uttori.footnotes={}] Footnote settings.
+ * @property {Function} [uttori.footnotes.referenceTag] A funciton to return the default HTML for a footnote reference.
+ * @property {Function} [uttori.footnotes.definitionOpenTag] A funciton to return the default opening HTML for a footnote definition.
+ * @property {string} [uttori.footnotes.definitionCloseTag='</div>\n'] The default closing HTML for a footnote definition.
  * @property {object} [uttori.toc={}] Table of Contents settings.
  * @property {string} [uttori.toc.openingTag='<nav class&#61;"table-of-contents">'] The opening DOM tag for the TOC container.
  * @property {string} [uttori.toc.closingTag='</nav>'] The closing DOM tag for the TOC container.
@@ -70,6 +75,11 @@ class MarkdownItRenderer {
         allowedExternalDomains: [],
         openNewWindow: true,
         lazyImages: true,
+        footnotes: {
+          referenceTag,
+          definitionOpenTag,
+          definitionCloseTag: '</div>\n',
+        },
         toc: {
           openingTag: '<nav class="table-of-contents">',
           closingTag: '</nav>',
