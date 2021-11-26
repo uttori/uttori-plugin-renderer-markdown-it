@@ -11,10 +11,32 @@ declare module "footnotes" {
         id: number;
         label: string;
     }): string;
+    export function configFootnoteReference(tokens: Token[], index: number, options: object, _env: object, _slf: Renderer): string;
+    export function configFootnoteOpen(tokens: Token[], index: number, options: object, _env: object, _slf: Renderer): string;
+    export function configFootnoteClose(_tokens: Token[], _index: number, options: object, _env: object, _slf: Renderer): string;
+}
+declare module "toc" {
+    export function headingOpen(tokens: Token[], index: number, options: object): string;
+    export function tocOpen(_tokens: Token[], _index: number, options: object): string;
+    export function tocClose(_tokens: Token[], _index: number, options: object): string;
+    export function tocBody(_tokens: Token[], _index: number, options: object, env: object, _slf: Renderer): string;
+    export function tocRule(state: StateInline): boolean;
+    export function collectHeaders(state: StateCore): void;
+}
+declare module "wikilinks" {
+    export function wikilinks(state: StateInline): boolean;
+}
+declare module "youtube" {
+    export function youtube(state: StateCore): void;
+}
+declare module "uttori-inline" {
+    export function getValue(token: Token, key: string): any | undefined;
+    export function updateValue(token: Token, key: string, value: string): void;
+    export function uttoriInline(state: StateCore): boolean;
 }
 declare module "markdown-it-plugin" {
     export = Plugin;
-    function Plugin(md: MarkdownIt, pluginOptions?: object): object;
+    function Plugin(md: MarkdownIt): object;
 }
 declare module "index" {
     export = MarkdownItRenderer;
