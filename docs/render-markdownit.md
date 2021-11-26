@@ -214,6 +214,10 @@ const html = MarkdownItRenderer.render(content, config);
 | [uttori.allowedExternalDomains] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
 | [uttori.openNewWindow] | <code>boolean</code> | <code>true</code> | Open external domains in a new window. |
 | [uttori.lazyImages] | <code>boolean</code> | <code>true</code> | Add lazy loading params to image tags. |
+| [uttori.footnotes] | <code>object</code> | <code>{}</code> | Footnote settings. |
+| [uttori.footnotes.referenceTag] | <code>function</code> |  | A funciton to return the default HTML for a footnote reference. |
+| [uttori.footnotes.definitionOpenTag] | <code>function</code> |  | A funciton to return the default opening HTML for a footnote definition. |
+| [uttori.footnotes.definitionCloseTag] | <code>string</code> | <code>&quot;&#x27;&lt;/div&gt;\\n&#x27;&quot;</code> | The default closing HTML for a footnote definition. |
 | [uttori.toc] | <code>object</code> | <code>{}</code> | Table of Contents settings. |
 | [uttori.toc.openingTag] | <code>string</code> | <code>&quot;&#x27;&lt;nav class&amp;#61;\&quot;table-of-contents\&quot;&gt;&#x27;&quot;</code> | The opening DOM tag for the TOC container. |
 | [uttori.toc.closingTag] | <code>string</code> | <code>&quot;&#x27;&lt;/nav&gt;&#x27;&quot;</code> | The closing DOM tag for the TOC container. |

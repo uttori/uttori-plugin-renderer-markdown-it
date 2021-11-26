@@ -1,6 +1,6 @@
 [![view on npm](https://img.shields.io/npm/v/@uttori/plugin-renderer-markdown-it.svg)](https://www.npmjs.com/package/@uttori/plugin-renderer-markdown-it)
 [![npm module downloads](https://img.shields.io/npm/dt/@uttori/plugin-renderer-markdown-it)](https://www.npmjs.com/package/@uttori/plugin-renderer-markdown-it)
-[![Build Status](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it.svg?branch=master)](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it)
+[![Build Status](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it.svg?branch=master)](https://app.travis-ci.com/github/uttori/uttori-plugin-renderer-markdown-it)
 [![Dependency Status](https://david-dm.org/uttori/uttori-plugin-renderer-markdown-it.svg)](https://david-dm.org/uttori/uttori-plugin-renderer-markdown-it)
 [![Coverage Status](https://coveralls.io/repos/uttori/uttori-plugin-renderer-markdown-it/badge.svg?branch=master)](https://coveralls.io/r/uttori/uttori-plugin-renderer-markdown-it?branch=master)
 [![Tree-Shaking Support](https://badgen.net/bundlephobia/tree-shaking/@uttori/plugin-renderer-markdown-it)](https://bundlephobia.com/result?p=@uttori/plugin-renderer-markdown-it)
@@ -84,6 +84,22 @@ Configuration outside of registration events and Uttori specific items is avalia
     // Add lazy loading params to image tags.
     lazyImages: true,
 
+    // Footnotes
+    footnotes: {
+      // A funciton to return the default HTML for a footnote reference.
+      referenceTag: ({ id, label }) => {
+        return `...`;
+      },
+
+      // A funciton to return the default opening HTML for a footnote definition.
+      definitionOpenTag: ({ id, label }) => {
+        return `...`;
+      },
+
+      // The default closing HTML for a footnote definition.
+      definitionCloseTag: '</div>\n',
+    },
+
     // Table of Contents
     toc: {
       // The opening DOM tag for the TOC container.
@@ -134,24 +150,35 @@ Will render to a minified version of:
   <nav class="table-of-contents">
     <ul class="table-of-contents-h1">
       <li><a href="#first-0" title="First">First</a></li>
-      <ul class="table-of-contents-h2">
+      <li><ul class="table-of-contents-h2">
         <li><a href="#second-1" title="Second">Second</a></li>
-        <ul class="table-of-contents-h3">
+        <li><ul class="table-of-contents-h3">
           <li><a href="#third-2" title="Third">Third</a></li>
           <li><a href="#third-again-3" title="Third Again">Third Again</a></li>
-          <ul class="table-of-contents-h4">
+          <li><ul class="table-of-contents-h4">
             <li><a href="#fouth-4" title="Fouth">Fouth</a></li>
-          </ul>
-        </ul>
+          </ul></li>
+        </ul></li>
         <li><a href="#second-again-6" title="Second Again">Second Again</a></li>
-        <ul class="table-of-contents-h3">
+        <li><ul class="table-of-contents-h3">
           <li><a href="#third-last-7" title="Third Last">Third Last</a></li>
-        </ul>
-      </ul>
+        </ul></li>
+      </ul></li>
     </ul>
   </nav>
   Content Content
 </p>
+```
+
+### Footnotes
+
+This allos for adding footnotes & their definitions.
+
+```md
+
+`ADC (dp,X)`[^1]
+
+[^1]: Add 1 cycle if m=0 (16-bit memory/accumulator)
 ```
 
 ### YouTube Embedding
@@ -404,6 +431,10 @@ const html = MarkdownItRenderer.render(content, config);
 | [uttori.allowedExternalDomains] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
 | [uttori.openNewWindow] | <code>boolean</code> | <code>true</code> | Open external domains in a new window. |
 | [uttori.lazyImages] | <code>boolean</code> | <code>true</code> | Add lazy loading params to image tags. |
+| [uttori.footnotes] | <code>object</code> | <code>{}</code> | Footnote settings. |
+| [uttori.footnotes.referenceTag] | <code>function</code> |  | A funciton to return the default HTML for a footnote reference. |
+| [uttori.footnotes.definitionOpenTag] | <code>function</code> |  | A funciton to return the default opening HTML for a footnote definition. |
+| [uttori.footnotes.definitionCloseTag] | <code>string</code> | <code>&quot;&#x27;&lt;/div&gt;\\n&#x27;&quot;</code> | The default closing HTML for a footnote definition. |
 | [uttori.toc] | <code>object</code> | <code>{}</code> | Table of Contents settings. |
 | [uttori.toc.openingTag] | <code>string</code> | <code>&quot;&#x27;&lt;nav class&amp;#61;\&quot;table-of-contents\&quot;&gt;&#x27;&quot;</code> | The opening DOM tag for the TOC container. |
 | [uttori.toc.closingTag] | <code>string</code> | <code>&quot;&#x27;&lt;/nav&gt;&#x27;&quot;</code> | The closing DOM tag for the TOC container. |
