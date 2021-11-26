@@ -1,6 +1,6 @@
 {
   "name": "@uttori/plugin-renderer-markdown-it",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "Uttori plugin for rendering Markdown powered by MarkdownIt.",
   "author": "Matthew Callis <matthew.callis@gmail.com>",
   "contributors": [],
