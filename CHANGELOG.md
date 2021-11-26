@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.1](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.3.0...v4.3.1) - 2021-11-26
+
+- 🛠 Fix Node v14 by removing ||= syntax
+
 ## [4.3.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.2.1...v4.3.0) - 2021-11-26
 
 - 🧰 Support for `[^1] ... [^1]: Footnote` Footnotes based on [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote)

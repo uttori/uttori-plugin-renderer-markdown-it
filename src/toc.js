@@ -142,7 +142,7 @@ function tocRule(state) {
  */
 function collectHeaders(state) {
   // Create a mapping of all the headers, their indentation level, content and slug.
-  state.env.toc_headings ||= [];
+  state.env.toc_headings = state.env.toc_headings || [];
   state.tokens.forEach((token, i, tokens) => {
     if (token.type === 'heading_close') {
       const inline = tokens[i - 1];
