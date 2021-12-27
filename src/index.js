@@ -15,6 +15,7 @@ const { referenceTag, definitionOpenTag } = require('./footnotes');
  * @property {boolean} [typographer=false] Enable some language-neutral replacement + quotes beautification.
  * @property {string} [quotes='“”‘’'] Double + single quotes replacement pairs, when typographer enabled, and smartquotes on. Could be either a String or an Array. For example, you can use '«»„“' for Russian, '„“‚‘' for German, and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp).
  * @property {Function} [highlight] Highlighter function. Should return escaped HTML, or '' if the source string is not changed and should be escaped externally. If result starts with <pre... internal wrapper is skipped.
+ * @property {object} [events={}] Events to listen for.
  * @property {object} [uttori={}] Custom values for Uttori specific use.
  * @property {string} [uttori.baseUrl=''] Prefix for relative URLs, useful when the Express app is not at URI root.
  * @property {string[]} [uttori.allowedExternalDomains=[]] Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org).

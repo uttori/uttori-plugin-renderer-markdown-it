@@ -18,25 +18,26 @@
     "node": ">= 12"
   },
   "dependencies": {
-    "markdown-it": "^12.2.0",
-    "slugify": "^1.6.3"
+    "markdown-it": "^12.3.0",
+    "slugify": "^1.6.4"
   },
   "optionalDependencies": {
-    "debug": "^4.3.2"
+    "debug": "^4.3.3"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.5",
     "ava": "^3.15.0",
-    "eslint": "^8.3.0",
-    "eslint-config-airbnb": "^19.0.1",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-anti-trojan-source": "^1.0.6",
     "eslint-plugin-ava": "^13.1.0",
     "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsdoc": "^37.0.3",
+    "eslint-plugin-jsdoc": "^37.4.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
     "eslint-plugin-ramda": "^2.5.1",
-    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-xss": "^0.1.11",
@@ -45,7 +46,7 @@
     "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
     "release-it": "^14.11.8",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.4"
   },
   "files": [
     "esm/*",
@@ -59,10 +60,12 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "require": "./src/index.js",
       "import": "./esm/index.js"
     },
     "./markdown-it-plugin": {
+      "types": "./types/index.d.ts",
       "require": "./src/markdown-it-plugin.js"
     }
   },
