@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-useless-escape */
 const test = require('ava');
 const MarkdownItRenderer = require('../src');
@@ -11,6 +12,12 @@ test('MarkdownItRenderer.render(content, config): can render a YouTube video', (
 test('MarkdownItRenderer.render(content, config): can render a YouTube video with only a v tag', (t) => {
   const markdown = '<youtube v="aR3fVuLEtj8">';
   const output = '<div class="youtube-embed"><iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe></div>';
+  t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
+});
+
+test('MarkdownItRenderer.render(content, config): will render nothing with a missing v', (t) => {
+  const markdown = '<youtube width="360">';
+  const output = '<div class="youtube-embed"></div>';
   t.is(MarkdownItRenderer.render(markdown, { ...MarkdownItRenderer.defaultConfig(), uttori: { ...MarkdownItRenderer.defaultConfig().uttori, lazyImages: false } }), output);
 });
 

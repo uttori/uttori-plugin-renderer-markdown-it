@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.3.2...v4.4.0) - 2022-05-29
+
+- 🎁 Update `markdown-it` to v13.0.1
+- 🎁 Update `slugify` to v1.6.5
+- 🛠 Correctly remove code for broken YouTube links
+- 🎁 Update dev dependencies
+
 ## [4.3.2](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.3.1...v4.3.2) - 2021-12-27
 
 - Update dependencies

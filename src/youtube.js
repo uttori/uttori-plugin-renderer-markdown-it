@@ -20,12 +20,14 @@ function youtube(state) {
 
     // Pull the parts out of the tag:
     // <youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
+    // eslint-disable-next-line security/detect-unsafe-regex
     const parts = [...currentToken.content.matchAll(/\s+(v|start|width|height|title)=('[^']*'|"[^"]*")?/g)];
+    /** @type {Object<string, string>} */
     const keys = parts.reduce((output, item) => {
       output[item[1]] = item[2].replace(/["']+/g, '');
       return output;
     }, {});
-    const { v, width = 560, height = 315, title = '', start = 0 } = keys;
+    const { v = '', width = '560', height = '315', title = '', start = '0' } = keys;
 
     // Build the tokens
     const nodes = [];
@@ -36,20 +38,23 @@ function youtube(state) {
     token.level = level++;
     nodes.push(token);
 
-    token = new state.Token('iframe_open', 'iframe', 1);
-    token.attrs = [
-      ['class', 'youtube-embed-video'],
-      ['width', width],
-      ['height', height],
-      ['src', `https://www.youtube-nocookie.com/embed/${v}?start=${start}`],
-      ['title', title],
-      ['frameborder', 0],
-      ['allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'],
-      ['allowfullscreen', true],
-    ];
-    nodes.push(token);
-    token = new state.Token('iframe_close', 'iframe', -1);
-    nodes.push(token);
+    // Only render an iframe with a valid video.
+    if (v) {
+      token = new state.Token('iframe_open', 'iframe', 1);
+      token.attrs = [
+        ['class', 'youtube-embed-video'],
+        ['width', width],
+        ['height', height],
+        ['src', `https://www.youtube-nocookie.com/embed/${v}?start=${start}`],
+        ['title', title],
+        ['frameborder', '0'],
+        ['allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'],
+        ['allowfullscreen', 'true'],
+      ];
+      nodes.push(token);
+      token = new state.Token('iframe_close', 'iframe', -1);
+      nodes.push(token);
+    }
 
     token = new state.Token('div_close', 'div', -1);
     token.level = --level;
