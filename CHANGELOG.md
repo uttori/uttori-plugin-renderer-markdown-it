@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.5.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.4.0...v4.5.0) - 2022-06-29
+
+- 🧰 Support for `<br /> or <br/> or <br>` tags in markup to allow line breaks anywhere, useful in tables
+- 🎁 Update dev dependencies
+
 ## [4.4.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.3.2...v4.4.0) - 2022-05-29
 
 - 🎁 Update `markdown-it` to v13.0.1

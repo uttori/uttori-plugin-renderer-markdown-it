@@ -11,6 +11,7 @@ const { headingOpen, tocOpen, tocClose, tocBody, tocRule, collectHeaders } = req
 const { wikilinks } = require('./wikilinks');
 const { youtube } = require('./youtube');
 const { uttoriInline } = require('./uttori-inline');
+const { lineBreaker } = require('./line-breaker');
 
 /**
  * Extend MarkdownIt with Uttori specific items:
@@ -97,6 +98,14 @@ function Plugin(md) {
    * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
    */
   md.core.ruler.after('block', 'youtube', youtube);
+
+  /**
+   * Find and replace any <br /> tags in text with HTML line breaks.
+   *
+   * @param {StateCore} state State of MarkdownIt.
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
+   */
+  md.core.ruler.after('block', 'line-breaker', lineBreaker);
 
   /**
    * Uttori specific rules for manipulating the markup.
