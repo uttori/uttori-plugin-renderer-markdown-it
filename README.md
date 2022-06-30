@@ -21,6 +21,7 @@ This also includes a MarkdownIt plugin you can use seperately that supports:
 * Support for [WikiLinks](https://en.wikipedia.org/wiki/Help:Link#Wikilinks_(internal_links)) style linking
 * Support for adding [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) tags to `img` tags
 * Support for adding YouTube iframe videos
+* Support for `<br> or <br/> or <br />` style line breaks anywhere, useful for tables
 
 ## Install
 
