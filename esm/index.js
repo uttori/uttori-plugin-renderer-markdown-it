@@ -11,3 +11,4 @@ export { default as toc } from '../src/toc';
 export { default as uttoriInline } from '../src/uttori-inline';
 export { default as wikilinks } from '../src/wikilinks';
 export { default as youtube } from '../src/youtube';
+export { default as lineBreaker } from '../src/line-breaker';
