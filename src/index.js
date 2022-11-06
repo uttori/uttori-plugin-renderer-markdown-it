@@ -1,7 +1,7 @@
 /** @type {Function} */
 let debug = () => {}; try { debug = require('debug')('Uttori.Plugin.Render.MarkdownIt'); } catch {}
 const MarkdownIt = require('markdown-it');
-const slugify = require('slugify');
+const slugify = require('slugify').default;
 const markdownItPlugin = require('./markdown-it-plugin');
 const { referenceTag, definitionOpenTag } = require('./footnotes');
 
@@ -26,6 +26,7 @@ const { referenceTag, definitionOpenTag } = require('./footnotes');
  * @property {Function} [uttori.footnotes.definitionOpenTag] A funciton to return the default opening HTML for a footnote definition.
  * @property {string} [uttori.footnotes.definitionCloseTag='</div>\n'] The default closing HTML for a footnote definition.
  * @property {object} [uttori.toc={}] Table of Contents settings.
+ * @property {boolean} [uttori.toc.extract=false] When true, extract the table of contents to the view model from the content.
  * @property {string} [uttori.toc.openingTag='<nav class&#61;"table-of-contents">'] The opening DOM tag for the TOC container.
  * @property {string} [uttori.toc.closingTag='</nav>'] The closing DOM tag for the TOC container.
  * @property {object} [uttori.toc.slugify={ lower: true }] Slugify options for convering headings to anchor links.
@@ -82,6 +83,7 @@ class MarkdownItRenderer {
           definitionCloseTag: '</div>\n',
         },
         toc: {
+          extract: false,
           openingTag: '<nav class="table-of-contents">',
           closingTag: '</nav>',
           slugify: {
@@ -282,6 +284,56 @@ class MarkdownItRenderer {
     }
 
     return md.render(content).trim();
+  }
+
+  /**
+   * Will attempt to extract the table of contents when set to and add it to the view model.
+   *
+   * @param {object} viewModel - Markdown content to be converted to HTML.
+   * @param {object} context - A Uttori-like context.
+   * @param {object} context.config - A provided configuration to use.
+   * @param {object} context.config.uttori - A provided configuration to use.
+   * @param {object} context.config.uttori.toc - A provided configuration to use.
+   * @param {boolean}  context.config.uttori.toc.extract When true, extract the table of contents to the view model from the content.
+   * @returns {object} The view model.
+   * @example <caption>MarkdownItRenderer.viewModelDetail(viewModel, context)</caption>
+   * viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
+   * @static
+   */
+  static viewModelDetail(viewModel, context) {
+    debug('viewModelDetail');
+    if (!context || !context.config || !context.config[MarkdownItRenderer.configKey]) {
+      throw new Error('Missing configuration.');
+    }
+    const config = MarkdownItRenderer.extendConfig(context.config[MarkdownItRenderer.configKey]);
+
+    // Do we need to do anything?
+    if (!config.uttori.toc.extract) {
+      return viewModel;
+    }
+
+    // Check for the HTML table of contents
+    if (!viewModel?.document?.html) {
+      debug('No document.html provided, returning the viewModel.');
+      return viewModel;
+    }
+    if (!viewModel?.document?.html?.includes(config.uttori.toc.openingTag)) {
+      debug('No table of contents found, returning the viewModel.');
+      return viewModel;
+    }
+
+    // Extract the table of contents and update the HTML
+    const [preToc, tocStart] = viewModel.document.html.split(config.uttori.toc.openingTag);
+    const [toc, postToc] = tocStart.split(config.uttori.toc.closingTag);
+
+    return {
+      ...viewModel,
+      document: {
+        ...viewModel.document,
+        html: `${preToc.trim()}${postToc.trim()}`,
+      },
+      toc: `${config.uttori.toc.openingTag.trim()}${toc?.trim()}${config.uttori.toc.closingTag.trim()}`,
+    };
   }
 }
 

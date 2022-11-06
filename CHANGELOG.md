@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.6.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.5.0...v4.6.0) - 2022-11-06
+
+- 🧰 Support for extracting table of contents from `document.html` as a stand alone string
+- 🛠 Fix some type issues
+- 🎁 Update dev dependencies
+
 ## [4.5.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.4.0...v4.5.0) - 2022-06-29
 
 - 🧰 Support for `<br /> or <br/> or <br>` tags in markup to allow line breaks anywhere, useful in tables

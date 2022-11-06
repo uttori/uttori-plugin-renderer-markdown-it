@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava');
+const test = require('ava').default;
 const MarkdownItRenderer = require('../src');
 
 test('MarkdownItRenderer.register(context): can register', (t) => {
@@ -124,7 +124,10 @@ test('MarkdownItRenderer.renderCollection(collection, context): throws error wit
 });
 
 test('MarkdownItRenderer.renderCollection(collection, context): can accept a config', (t) => {
-  t.deepEqual(MarkdownItRenderer.renderCollection([{ html: '![test](/test.png)' }], { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }), [{ html: '<p><img src="/test.png" alt="test" loading="lazy" /></p>' }]);
+  t.deepEqual(
+    MarkdownItRenderer.renderCollection([{ html: '![test](/test.png)' }], { config: { [MarkdownItRenderer.configKey]: { xhtmlOut: true } } }),
+    [{ html: '<p><img src="/test.png" alt="test" loading="lazy" /></p>' }],
+  );
 });
 
 test('MarkdownItRenderer.render(content, config): handles empty values', (t) => {
@@ -141,4 +144,95 @@ test('MarkdownItRenderer.render(content, config): replaces missing links with a 
   t.is(MarkdownItRenderer.render('[Test]'), '<p>[Test]</p>');
   t.is(MarkdownItRenderer.render('[Test]()'), '<p><a href="/test">Test</a></p>');
   t.is(MarkdownItRenderer.render('[CrAzY CaSe SpAcEd]()'), '<p><a href="/crazy-case-spaced">CrAzY CaSe SpAcEd</a></p>');
+});
+
+test('MarkdownItRenderer.viewModelDetail(viewModel, context): throws error without a config in the context', (t) => {
+  t.throws(() => {
+    MarkdownItRenderer.viewModelDetail({});
+  }, { message: 'Missing configuration.' });
+  t.throws(() => {
+    MarkdownItRenderer.viewModelDetail({ config: { } });
+  }, { message: 'Missing configuration.' });
+  t.throws(() => {
+    MarkdownItRenderer.viewModelDetail({ config: { [MarkdownItRenderer.configKey]: { } } });
+  }, { message: 'Missing configuration.' });
+});
+
+test('MarkdownItRenderer.viewModelDetail(viewModel, context): handles empty values', (t) => {
+  const context = {
+    config: {
+      [MarkdownItRenderer.configKey]: {
+        uttori: {
+          toc: {
+            extract: true,
+          },
+        },
+      },
+    },
+  };
+  t.is(MarkdownItRenderer.viewModelDetail('', context), '');
+  t.is(MarkdownItRenderer.viewModelDetail(' ', context), ' ');
+  t.is(MarkdownItRenderer.viewModelDetail(null, context), null);
+  t.is(MarkdownItRenderer.viewModelDetail(Number.NaN, context), Number.NaN);
+  t.is(MarkdownItRenderer.viewModelDetail(undefined, context), undefined);
+  t.is(MarkdownItRenderer.viewModelDetail(false, context), false);
+});
+
+test('MarkdownItRenderer.viewModelDetail(viewModel, context): handles no html in view model document', (t) => {
+  const context = {
+    config: {
+      [MarkdownItRenderer.configKey]: {
+        uttori: {
+          toc: {
+            extract: true,
+          },
+        },
+      },
+    },
+  };
+  t.deepEqual(MarkdownItRenderer.viewModelDetail({}, context), {});
+  t.deepEqual(MarkdownItRenderer.viewModelDetail({ document: {} }, context), { document: {} });
+  t.deepEqual(MarkdownItRenderer.viewModelDetail({ document: { html: '' } }, context), { document: { html: '' } });
+  t.deepEqual(MarkdownItRenderer.viewModelDetail({ document: { html: 'Test' } }, context), { document: { html: 'Test' } });
+});
+
+test('MarkdownItRenderer.viewModelDetail(viewModel, context): handles when the config is set to not extract table of contents', (t) => {
+  const context = {
+    config: {
+      [MarkdownItRenderer.configKey]: {
+        uttori: {
+          toc: {
+            extract: false,
+          },
+        },
+      },
+    },
+  };
+  t.deepEqual(MarkdownItRenderer.viewModelDetail({ document: { html: 'Test' } }, context), { document: { html: 'Test' } });
+});
+
+test('MarkdownItRenderer.viewModelDetail(viewModel, context): extracts table of contenst out of document.html and adds it to the toc key', (t) => {
+  const context = {
+    config: {
+      [MarkdownItRenderer.configKey]: {
+        uttori: {
+          toc: {
+            extract: true,
+          },
+        },
+      },
+    },
+  };
+  const config = MarkdownItRenderer.extendConfig(context.config[MarkdownItRenderer.configKey]);
+  const viewModel = {
+    document: {
+      html: `Pre${config.uttori.toc.openingTag}🤠${config.uttori.toc.closingTag}Post`,
+    },
+  };
+  t.deepEqual(MarkdownItRenderer.viewModelDetail(viewModel, context), {
+    document: {
+      html: 'PrePost',
+    },
+    toc: `${config.uttori.toc.openingTag}🤠${config.uttori.toc.closingTag}`,
+  });
 });

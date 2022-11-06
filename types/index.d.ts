@@ -1,4 +1,9 @@
-import MarkdownIt from 'markdown-it';
+/* eslint-disable no-redeclare */
+/* eslint-disable node/no-unsupported-features/es-syntax */
+/* eslint-disable no-unused-vars */
+/* eslint-disable lines-between-class-members */
+/* eslint-disable no-use-before-define */
+import MarkdownIt from 'markdown-it/lib';
 import Renderer from 'markdown-it/lib/renderer';
 import StateCore from 'markdown-it/lib/rules_core/state_core';
 import StateBlock from 'markdown-it/lib/rules_block/state_block';
@@ -35,6 +40,7 @@ export function youtube(state: StateCore): void;
 export function getValue(token: Token, key: string): any | undefined;
 export function updateValue(token: Token, key: string, value: string): void;
 export function uttoriInline(state: StateCore): boolean;
+export function lineBreaker(state: StateCore): void;
 
 export function Plugin(md: MarkdownIt): object;
 
@@ -60,6 +66,15 @@ export class MarkdownItRenderer {
       config: object;
   }): object[];
   static render(content: string, config: object): string;
+  static viewModelDetail(viewModel: object, context: {
+    config: {
+      uttori: {
+        toc: {
+          extract: boolean;
+        };
+      };
+    };
+  }): object;
 }
 export namespace MarkdownItRenderer {
   export { MarkdownItRendererOptions };
@@ -85,6 +100,7 @@ type MarkdownItRendererOptions = {
       definitionCloseTag?: string;
     };
     toc?: {
+      extract?: boolean;
       openingTag?: string;
       closingTag?: string;
       slugify?: object;
@@ -94,4 +110,3 @@ type MarkdownItRendererOptions = {
     };
   };
 };
-

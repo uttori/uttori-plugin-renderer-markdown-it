@@ -1,6 +1,5 @@
-// @ts-nocheck
 /* eslint-disable no-useless-escape */
-const test = require('ava');
+const test = require('ava').default;
 const MarkdownItRenderer = require('../src');
 
 test('MarkdownItRenderer.render(content, config): can render a YouTube video', (t) => {

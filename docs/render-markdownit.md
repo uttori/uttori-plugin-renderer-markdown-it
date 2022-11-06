@@ -36,6 +36,7 @@ Uttori MarkdownIt Renderer
     * [.renderContent(content, context)](#MarkdownItRenderer.renderContent) ⇒ <code>string</code>
     * [.renderCollection(collection, context)](#MarkdownItRenderer.renderCollection) ⇒ <code>Array.&lt;object&gt;</code>
     * [.render(content, config)](#MarkdownItRenderer.render) ⇒ <code>string</code>
+    * [.viewModelDetail(viewModel, context)](#MarkdownItRenderer.viewModelDetail) ⇒ <code>object</code>
 
 <a name="MarkdownItRenderer.configKey"></a>
 
@@ -189,6 +190,27 @@ Renders Markdown for a provided string with a provided MarkdownIt configuration.
 ```js
 const html = MarkdownItRenderer.render(content, config);
 ```
+<a name="MarkdownItRenderer.viewModelDetail"></a>
+
+### MarkdownItRenderer.viewModelDetail(viewModel, context) ⇒ <code>object</code>
+Will attempt to extract the table of contents when set to and add it to the view model.
+
+**Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
+**Returns**: <code>object</code> - The view model.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| viewModel | <code>object</code> | Markdown content to be converted to HTML. |
+| context | <code>object</code> | A Uttori-like context. |
+| context.config | <code>object</code> | A provided configuration to use. |
+| context.config.uttori | <code>object</code> | A provided configuration to use. |
+| context.config.uttori.toc | <code>object</code> | A provided configuration to use. |
+| context.config.uttori.toc.extract | <code>boolean</code> | When true, extract the table of contents to the view model from the content. |
+
+**Example** *(MarkdownItRenderer.viewModelDetail(viewModel, context))*  
+```js
+viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
+```
 <a name="debug"></a>
 
 ## debug() : <code>function</code>
@@ -220,6 +242,7 @@ const html = MarkdownItRenderer.render(content, config);
 | [uttori.footnotes.definitionOpenTag] | <code>function</code> |  | A funciton to return the default opening HTML for a footnote definition. |
 | [uttori.footnotes.definitionCloseTag] | <code>string</code> | <code>&quot;&#x27;&lt;/div&gt;\\n&#x27;&quot;</code> | The default closing HTML for a footnote definition. |
 | [uttori.toc] | <code>object</code> | <code>{}</code> | Table of Contents settings. |
+| [uttori.toc.extract] | <code>boolean</code> | <code>false</code> | When true, extract the table of contents to the view model from the content. |
 | [uttori.toc.openingTag] | <code>string</code> | <code>&quot;&#x27;&lt;nav class&amp;#61;\&quot;table-of-contents\&quot;&gt;&#x27;&quot;</code> | The opening DOM tag for the TOC container. |
 | [uttori.toc.closingTag] | <code>string</code> | <code>&quot;&#x27;&lt;/nav&gt;&#x27;&quot;</code> | The closing DOM tag for the TOC container. |
 | [uttori.toc.slugify] | <code>object</code> | <code>{ lower: true }</code> | Slugify options for convering headings to anchor links. |
