@@ -76,6 +76,12 @@ function uttoriInline(state) {
                 if (state.md.options?.uttori?.openNewWindow) {
                   updateValue(token, 'target', '_blank');
                 }
+              } else if (href.startsWith('color:')) {
+                // Convert the anchor tag to a span tag and add the link as the class.
+                token.tag = 'span';
+                token.attrs = [
+                  ['style', `color: ${href.slice(6)}`],
+                ];
               } else {
                 // Prefix for relative URLs
                 // eslint-disable-next-line no-lonely-if

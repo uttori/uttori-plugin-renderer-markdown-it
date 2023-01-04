@@ -28,6 +28,13 @@ test('MarkdownItRenderer.render(content, config): can set external links to open
   t.is(MarkdownItRenderer.render('[Test](https://evil.org/wiki/test)', { uttori: { openNewWindow: true, allowedExternalDomains: ['example.org'] } }), '<p><a href="https://evil.org/wiki/test" rel="external nofollow noopener noreferrer" target="_blank">Test</a></p>');
 });
 
+test('MarkdownItRenderer.render(content, config): can set colors on spans with special links', (t) => {
+  t.is(MarkdownItRenderer.render('[Test]', { uttori: { } }), '<p>[Test]</p>');
+  t.is(MarkdownItRenderer.render('[Test]()', { uttori: { } }), '<p><a href="/test">Test</a></p>');
+  t.is(MarkdownItRenderer.render('[Test](color:rgba(24,24,24,0.5))', { uttori: { } }), '<p><span style="color: rgba(24,24,24,0.5)">Test</a></p>');
+  t.is(MarkdownItRenderer.render('[Test](color:#black)', { uttori: { } }), '<p><span style="color: #black">Test</a></p>');
+});
+
 test('MarkdownItRenderer.render(content, config): can render an Image with lazy loading', (t) => {
   const markdown = '![](example.png "image title")';
   const output = '<p><img src="example.png" alt="" title="image title" loading="lazy"></p>';

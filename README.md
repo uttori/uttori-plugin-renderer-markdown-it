@@ -1,13 +1,7 @@
 [![view on npm](https://img.shields.io/npm/v/@uttori/plugin-renderer-markdown-it.svg)](https://www.npmjs.com/package/@uttori/plugin-renderer-markdown-it)
 [![npm module downloads](https://img.shields.io/npm/dt/@uttori/plugin-renderer-markdown-it)](https://www.npmjs.com/package/@uttori/plugin-renderer-markdown-it)
 [![Build Status](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it.svg?branch=master)](https://app.travis-ci.com/github/uttori/uttori-plugin-renderer-markdown-it)
-[![Dependency Status](https://david-dm.org/uttori/uttori-plugin-renderer-markdown-it.svg)](https://david-dm.org/uttori/uttori-plugin-renderer-markdown-it)
 [![Coverage Status](https://coveralls.io/repos/uttori/uttori-plugin-renderer-markdown-it/badge.svg?branch=master)](https://coveralls.io/r/uttori/uttori-plugin-renderer-markdown-it?branch=master)
-[![Tree-Shaking Support](https://badgen.net/bundlephobia/tree-shaking/@uttori/plugin-renderer-markdown-it)](https://bundlephobia.com/result?p=@uttori/plugin-renderer-markdown-it)
-[![Dependency Count](https://badgen.net/bundlephobia/dependency-count/@uttori/plugin-renderer-markdown-it)](https://bundlephobia.com/result?p=@uttori/plugin-renderer-markdown-it)
-[![Minified + GZip](https://badgen.net/bundlephobia/minzip/@uttori/plugin-renderer-markdown-it)](https://bundlephobia.com/result?p=@uttori/plugin-renderer-markdown-it)
-[![Minified](https://badgen.net/bundlephobia/min/@uttori/plugin-renderer-markdown-it)](https://bundlephobia.com/result?p=@uttori/plugin-renderer-markdown-it)
-
 # Uttori Renderer - Markdown - MarkdownIt
 
 Uttori renderer support for Markdown powered by [MarkdownIt](https://markdown-it.github.io/).
@@ -212,6 +206,23 @@ Will render to a minified version of:
 <div class="youtube-embed">
   <iframe class="youtube-embed-video" width="560" height="315" src="https://www.youtube-nocookie.com/embed/aR3fVuLEtj8?start=0" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
 </div>
+```
+
+### Colored Text
+
+You can add colored text with special links:
+
+```md
+[Text](color:#ffadad)
+[Text](color:#ffd6a5)
+[Text](color:#fdffb6)
+[Text](color:#caffbf)
+[Text](color:#9bf6ff)
+[Text](color:#A0C4FF)
+[Text](color:#bdb2ff)
+[Text](color:#ffcff8)
+[Text](color:#fffffc)
+[Text](color:rgba(0,0,0,0.5))
 ```
 
 * * *

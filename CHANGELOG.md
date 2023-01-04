@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.7.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.6.0...v4.7.0) - 2023-01-03
+
+- 🧰 Support for adding color to spans with `[Text](color:#ffadad)`
+- 🎁 Update dev dependencies
+
 ## [4.6.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.5.0...v4.6.0) - 2022-11-06
 
 - 🧰 Support for extracting table of contents from `document.html` as a stand alone string
