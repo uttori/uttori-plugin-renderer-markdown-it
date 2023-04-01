@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-  - "12"
   - "14"
   - "16"
+  - "18"
 
 install:
   - npm ci
@@ -15,7 +15,7 @@ script:
   - npm install -g coveralls
   - npm run lint
   - npm run validate --prod
-  - npm run test && nyc report --reporter=text-lcov | coveralls
+  - npm run test && c8 report --reporter=text-lcov | coveralls
 
 branches:
   only:

@@ -10,7 +10,6 @@ function getValue(token, key) {
   let value;
   token.attrs.forEach((attribute) => {
     // Parameter is set, read it.
-    /* istanbul ignore else */
     if (attribute[0] === key) {
       /* eslint-disable prefer-destructuring */
       value = attribute[1];
@@ -61,7 +60,6 @@ function uttoriInline(state) {
           }
           case 'link_open': {
             const href = getValue(token, 'href');
-            /* istanbul ignore else */
             if (href) {
               // Absolute URLs
               if (href.startsWith('http://') || href.startsWith('https://')) {

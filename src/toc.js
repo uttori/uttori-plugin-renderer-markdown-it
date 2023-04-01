@@ -129,7 +129,6 @@ function tocRule(state) {
 
   // Update the position and continue parsing.
   const newline = state.src.indexOf('\n', state.pos);
-  /* istanbul ignore next */
   state.pos = (newline !== -1) ? newline : state.pos + state.posMax + 1;
 
   return true;

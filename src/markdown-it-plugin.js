@@ -10,6 +10,7 @@ const { footnoteDefinition, footnoteReferences, configFootnoteReference, configF
 const { headingOpen, tocOpen, tocClose, tocBody, tocRule, collectHeaders } = require('./toc');
 const { wikilinks } = require('./wikilinks');
 const { youtube } = require('./youtube');
+const { video } = require('./video');
 const { uttoriInline } = require('./uttori-inline');
 const { lineBreaker } = require('./line-breaker');
 
@@ -98,6 +99,14 @@ function Plugin(md) {
    * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
    */
   md.core.ruler.after('block', 'youtube', youtube);
+
+  /**
+   * Find and replace the <video> tags with safe <video> tags.
+   *
+   * @param {StateCore} state State of MarkdownIt.
+   * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
+   */
+  md.core.ruler.after('block', 'video', video);
 
   /**
    * Find and replace any <br /> tags in text with HTML line breaks.

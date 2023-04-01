@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.8.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.7.0...v4.8.0) - 2023-04-01
+
+- 🧰 Support for adding videos with `<video src="/uploads/example.mp4">`
+- 🛠 Switch to `c8` from `nyc` and clean up unused ignore comments
+- Update `slugify` to [v1.6.6](https://github.com/simov/slugify/blob/master/CHANGELOG.md)
+- 🎁 Update dev dependencies
+
 ## [4.7.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.6.0...v4.7.0) - 2023-01-03
 
 - 🧰 Support for adding color to spans with `[Text](color:#ffadad)`

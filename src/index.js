@@ -1,5 +1,5 @@
 /** @type {Function} */
-let debug = () => {}; try { debug = require('debug')('Uttori.Plugin.Render.MarkdownIt'); } catch {}
+let debug = () => {}; /* c8 ignore next */ try { debug = require('debug')('Uttori.Plugin.Render.MarkdownIt'); } catch {}
 const MarkdownIt = require('markdown-it');
 const slugify = require('slugify').default;
 const markdownItPlugin = require('./markdown-it-plugin');

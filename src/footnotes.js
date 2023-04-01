@@ -38,7 +38,7 @@ function footnoteDefinition(state, startLine, endLine, silent) {
   if (pos + 1 >= max || state.src.charCodeAt(++pos) !== 0x3A) return false;
 
   // We have a valid token.
-  /* istanbul ignore next */
+  /* c8 ignore next */
   if (silent) return true;
   pos++;
 
@@ -95,7 +95,6 @@ function footnoteDefinition(state, startLine, endLine, silent) {
   state.parentType = 'footnote';
 
   // Ensure the block indentation is maintained for the footnote content.
-  /* istanbul ignore else */
   if (state.sCount[startLine] < state.blkIndent) {
     state.sCount[startLine] += state.blkIndent;
   }
@@ -153,7 +152,7 @@ function footnoteReferences(state, silent) {
   // It is invalid if it has no label.
   if (pos === start + 2) return false;
   // It is invalid if it goes beyong the max length.
-  /* istanbul ignore next */
+  /* c8 ignore next */
   if (pos >= max) return false;
   pos++;
 
@@ -161,7 +160,6 @@ function footnoteReferences(state, silent) {
   const label = state.src.slice(start + 2, pos - 1);
   if (typeof state.env.footnotes.refs[`:${label}`] === 'undefined') return false;
 
-  /* istanbul ignore else */
   if (!silent) {
     // Build the actual token.
     const id = state.env.footnotes.refs[`:${label}`];
