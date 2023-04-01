@@ -16,6 +16,7 @@ This also includes a MarkdownIt plugin you can use seperately that supports:
 * Support for adding [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) tags to `img` tags
 * Support for adding YouTube iframe videos
 * Support for `<br> or <br/> or <br />` style line breaks anywhere, useful for tables
+* Support for `<video src="/uploads/example.mp4">` video embeds with allowed domains filtering
 
 ## Install
 
