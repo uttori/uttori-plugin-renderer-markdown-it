@@ -1,6 +1,7 @@
 /** @type {Function} */
 let debug = () => {}; /* c8 ignore next */ try { debug = require('debug')('Uttori.Plugin.Render.MarkdownIt'); } catch {}
 const MarkdownIt = require('markdown-it');
+const Token = require('markdown-it/lib/token');
 const slugify = require('slugify').default;
 const markdownItPlugin = require('./markdown-it-plugin');
 const { referenceTag, definitionOpenTag } = require('./footnotes');
@@ -16,7 +17,7 @@ const { referenceTag, definitionOpenTag } = require('./footnotes');
  * @property {string} [quotes='“”‘’'] Double + single quotes replacement pairs, when typographer enabled, and smartquotes on. Could be either a String or an Array. For example, you can use '«»„“' for Russian, '„“‚‘' for German, and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp).
  * @property {Function} [highlight] Highlighter function. Should return escaped HTML, or '' if the source string is not changed and should be escaped externally. If result starts with <pre... internal wrapper is skipped.
  * @property {object} [events={}] Events to listen for.
- * @property {object} [uttori={}] Custom values for Uttori specific use.
+ * @property {object} [uttori] Custom values for Uttori specific use.
  * @property {string} [uttori.baseUrl=''] Prefix for relative URLs, useful when the Express app is not at URI root.
  * @property {string[]} [uttori.allowedExternalDomains=[]] Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org).
  * @property {boolean} [uttori.openNewWindow=true] Open external domains in a new window.
@@ -106,19 +107,20 @@ class MarkdownItRenderer {
    * @returns {MarkdownItRendererOptions} The new configration.
    */
   static extendConfig(config = {}) {
+    const base = MarkdownItRenderer.defaultConfig();
     return {
-      ...MarkdownItRenderer.defaultConfig(),
+      ...base,
       ...config,
       uttori: {
-        ...MarkdownItRenderer.defaultConfig().uttori,
-        ...(config.uttori ? config.uttori : {}),
+        ...base.uttori,
+        ...(config?.uttori || {}),
         toc: {
-          ...MarkdownItRenderer.defaultConfig().uttori.toc,
-          ...(config.uttori && config.uttori.toc ? config.uttori.toc : {}),
+          ...base.uttori.toc,
+          ...(config?.uttori?.toc || {}),
         },
         wikilinks: {
-          ...MarkdownItRenderer.defaultConfig().uttori.wikilinks,
-          ...(config.uttori && config.uttori.wikilinks ? config.uttori.wikilinks : {}),
+          ...base.uttori.wikilinks,
+          ...(config?.uttori?.wikilinks || {}),
         },
       },
     };
@@ -254,8 +256,8 @@ class MarkdownItRenderer {
   /**
    * Renders Markdown for a provided string with a provided MarkdownIt configuration.
    *
-   * @param {string} content - Markdown content to be converted to HTML.
-   * @param {object} config - A provided MarkdownIt configuration to use.
+   * @param {string} content Markdown content to be converted to HTML.
+   * @param {object} config A provided MarkdownIt configuration to use.
    * @returns {string} The rendered content.
    * @example <caption>MarkdownItRenderer.render(content, config)</caption>
    * const html = MarkdownItRenderer.render(content, config);
@@ -269,8 +271,46 @@ class MarkdownItRenderer {
 
     const md = new MarkdownIt(config).use(markdownItPlugin);
 
+    // Clean up the content.
+    content = MarkdownItRenderer.cleanContent(content);
+    return md.render(content).trim();
+  }
+
+  /**
+   * Parse Markdown for a provided string with a provided MarkdownIt configuration.
+   *
+   * @param {string} content Markdown content to be converted to HTML.
+   * @param {object} config A provided MarkdownIt configuration to use.
+   * @returns {Token[]} The rendered content.
+   * @example <caption>MarkdownItRenderer.parse(content, config)</caption>
+   * const tokens = MarkdownItRenderer.parse(content, config);
+   * @see {@link https://markdown-it.github.io/markdown-it/#MarkdownIt.parse|MarkdownIt.parse}
+   * @static
+   */
+  static parse(content, config) {
+    if (!content) {
+      debug('No input provided, returning an empty array.');
+      return [];
+    }
+
+    const md = new MarkdownIt(config).use(markdownItPlugin);
+
+    // Clean up the content.
+    content = MarkdownItRenderer.cleanContent(content);
+    return md.parse(content, {});
+  }
+
+  /**
+   * Removes empty links, as these have caused issues.
+   * Find missing links, and link them to the slug from the provided text.
+   *
+   * @param {string} content Markdown content to be converted to HTML.
+   * @returns {string} The rendered content.
+   * @static
+   */
+  static cleanContent(content) {
     // Remove empty links, as these have caused issues.
-    content.replace(/\[]\(\)/g, '');
+    content = content.replace(/\[]\(\)/g, '');
 
     // Find missing links, and link them.
     const missingLinks = content.match(/\[(.*)]\(\s?\)/g) || [];
@@ -283,17 +323,17 @@ class MarkdownItRenderer {
       });
     }
 
-    return md.render(content).trim();
+    return content;
   }
 
   /**
    * Will attempt to extract the table of contents when set to and add it to the view model.
    *
-   * @param {object} viewModel - Markdown content to be converted to HTML.
-   * @param {object} context - A Uttori-like context.
-   * @param {object} context.config - A provided configuration to use.
-   * @param {object} context.config.uttori - A provided configuration to use.
-   * @param {object} context.config.uttori.toc - A provided configuration to use.
+   * @param {object} viewModel Markdown content to be converted to HTML.
+   * @param {object} context A Uttori-like context.
+   * @param {object} context.config A provided configuration to use.
+   * @param {object} context.config.uttori A provided configuration to use.
+   * @param {object} context.config.uttori.toc A provided configuration to use.
    * @param {boolean}  context.config.uttori.toc.extract When true, extract the table of contents to the view model from the content.
    * @returns {object} The view model.
    * @example <caption>MarkdownItRenderer.viewModelDetail(viewModel, context)</caption>
@@ -308,7 +348,8 @@ class MarkdownItRenderer {
     const config = MarkdownItRenderer.extendConfig(context.config[MarkdownItRenderer.configKey]);
 
     // Do we need to do anything?
-    if (!config.uttori.toc.extract) {
+    if (!config.uttori?.toc?.extract) {
+      debug('No document.html provided, returning the viewModel.');
       return viewModel;
     }
 
@@ -332,7 +373,7 @@ class MarkdownItRenderer {
         ...viewModel.document,
         html: `${preToc.trim()}${postToc.trim()}`,
       },
-      toc: `${config.uttori.toc.openingTag.trim()}${toc?.trim()}${config.uttori.toc.closingTag.trim()}`,
+      toc: `${config.uttori.toc.openingTag?.trim()}${toc?.trim()}${config.uttori.toc.closingTag?.trim()}`,
     };
   }
 }

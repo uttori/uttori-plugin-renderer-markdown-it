@@ -22,7 +22,7 @@ function youtube(state) {
     // <youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
     // eslint-disable-next-line security/detect-unsafe-regex
     const parts = [...currentToken.content.matchAll(/\s+(v|start|width|height|title)=('[^']*'|"[^"]*")?/g)];
-    /** @type {Object<string, string>} */
+    /** @type {{[key: string]: string}} */
     const keys = parts.reduce((output, item) => {
       output[item[1]] = item[2].replace(/["']+/g, '');
       return output;

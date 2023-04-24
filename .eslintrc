@@ -53,6 +53,7 @@
     "global-require": 0,
     "import/no-dynamic-require": 0,
     "import/no-unresolved": 0,
+    "jsdoc/tag-lines": 0,
     "max-classes-per-file": 0,
     "max-len": 0,
     "no-bitwise": 0,

@@ -66,6 +66,7 @@ export class MarkdownItRenderer {
       config: object;
   }): object[];
   static render(content: string, config: object): string;
+  static parse(content: string, config: object): Token[];
   static viewModelDetail(viewModel: object, context: {
     config: {
       uttori: {

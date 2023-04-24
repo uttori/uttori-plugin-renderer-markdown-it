@@ -2,6 +2,7 @@
 [![npm module downloads](https://img.shields.io/npm/dt/@uttori/plugin-renderer-markdown-it)](https://www.npmjs.com/package/@uttori/plugin-renderer-markdown-it)
 [![Build Status](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it.svg?branch=master)](https://app.travis-ci.com/github/uttori/uttori-plugin-renderer-markdown-it)
 [![Coverage Status](https://coveralls.io/repos/uttori/uttori-plugin-renderer-markdown-it/badge.svg?branch=master)](https://coveralls.io/r/uttori/uttori-plugin-renderer-markdown-it?branch=master)
+
 # Uttori Renderer - Markdown - MarkdownIt
 
 Uttori renderer support for Markdown powered by [MarkdownIt](https://markdown-it.github.io/).
@@ -16,6 +17,9 @@ This also includes a MarkdownIt plugin you can use seperately that supports:
 * Support for adding [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) tags to `img` tags
 * Support for adding YouTube iframe videos
 * Support for `<br> or <br/> or <br />` style line breaks anywhere, useful for tables
+* Support for adding videos with `<video src="/uploads/example.mp4">`
+* Support for adding color to spans with `[Text](color:#ffadad)`
+* Parse to tokens for building an AST (abstract syntax tree) using `MarkdownItRenderer.parse(content, config)`
 
 ## Install
 

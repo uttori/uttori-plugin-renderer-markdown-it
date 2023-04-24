@@ -22,7 +22,7 @@ function video(state) {
     // <video src="/uploads/example.mp4" />
     // eslint-disable-next-line security/detect-unsafe-regex
     const parts = [...currentToken.content.matchAll(/\s+(src)=('[^']*'|"[^"]*")?/g)];
-    /** @type {Object<string, string>} */
+    /** @type {{[key: string]: string}} */
     const keys = parts.reduce((output, item) => {
       output[item[1]] = item[2].replace(/["']+/g, '');
       return output;

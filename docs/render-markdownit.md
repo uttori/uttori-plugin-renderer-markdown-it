@@ -36,6 +36,8 @@ Uttori MarkdownIt Renderer
     * [.renderContent(content, context)](#MarkdownItRenderer.renderContent) ⇒ <code>string</code>
     * [.renderCollection(collection, context)](#MarkdownItRenderer.renderCollection) ⇒ <code>Array.&lt;object&gt;</code>
     * [.render(content, config)](#MarkdownItRenderer.render) ⇒ <code>string</code>
+    * [.parse(content, config)](#MarkdownItRenderer.parse) ⇒ <code>Array.&lt;Token&gt;</code>
+    * [.cleanContent(content)](#MarkdownItRenderer.cleanContent) ⇒ <code>string</code>
     * [.viewModelDetail(viewModel, context)](#MarkdownItRenderer.viewModelDetail) ⇒ <code>object</code>
 
 <a name="MarkdownItRenderer.configKey"></a>
@@ -190,6 +192,37 @@ Renders Markdown for a provided string with a provided MarkdownIt configuration.
 ```js
 const html = MarkdownItRenderer.render(content, config);
 ```
+<a name="MarkdownItRenderer.parse"></a>
+
+### MarkdownItRenderer.parse(content, config) ⇒ <code>Array.&lt;Token&gt;</code>
+Parse Markdown for a provided string with a provided MarkdownIt configuration.
+
+**Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
+**Returns**: <code>Array.&lt;Token&gt;</code> - The rendered content.  
+**See**: [MarkdownIt.parse](https://markdown-it.github.io/markdown-it/#MarkdownIt.parse)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| content | <code>string</code> | Markdown content to be converted to HTML. |
+| config | <code>object</code> | A provided MarkdownIt configuration to use. |
+
+**Example** *(MarkdownItRenderer.parse(content, config))*  
+```js
+const tokens = MarkdownItRenderer.parse(content, config);
+```
+<a name="MarkdownItRenderer.cleanContent"></a>
+
+### MarkdownItRenderer.cleanContent(content) ⇒ <code>string</code>
+Removes empty links, as these have caused issues.
+Find missing links, and link them to the slug from the provided text.
+
+**Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
+**Returns**: <code>string</code> - The rendered content.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| content | <code>string</code> | Markdown content to be converted to HTML. |
+
 <a name="MarkdownItRenderer.viewModelDetail"></a>
 
 ### MarkdownItRenderer.viewModelDetail(viewModel, context) ⇒ <code>object</code>
@@ -232,7 +265,7 @@ viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
 | [quotes] | <code>string</code> | <code>&quot;&#x27;“”‘’&#x27;&quot;</code> | Double + single quotes replacement pairs, when typographer enabled, and smartquotes on. Could be either a String or an Array. For example, you can use '«»„“' for Russian, '„“‚‘' for German, and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp). |
 | [highlight] | <code>function</code> |  | Highlighter function. Should return escaped HTML, or '' if the source string is not changed and should be escaped externally. If result starts with <pre... internal wrapper is skipped. |
 | [events] | <code>object</code> | <code>{}</code> | Events to listen for. |
-| [uttori] | <code>object</code> | <code>{}</code> | Custom values for Uttori specific use. |
+| [uttori] | <code>object</code> |  | Custom values for Uttori specific use. |
 | [uttori.baseUrl] | <code>string</code> | <code>&quot;&#x27;&#x27;&quot;</code> | Prefix for relative URLs, useful when the Express app is not at URI root. |
 | [uttori.allowedExternalDomains] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
 | [uttori.openNewWindow] | <code>boolean</code> | <code>true</code> | Open external domains in a new window. |

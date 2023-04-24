@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.9.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.8.0...v4.9.0) - 2023-04-23
+
+- 🧰 Add `MarkdownItRenderer.parse(content, config)` for parsing Markdown to tokens.
+- 🛠 Clean up some logic using optional chaining for conditional checks.
+- 🎁 Update dev dependencies
+
 ## [4.8.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.7.0...v4.8.0) - 2023-04-01
 
 - 🧰 Support for adding videos with `<video src="/uploads/example.mp4">`
