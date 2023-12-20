@@ -1,14 +1,12 @@
-const StateInline = require('markdown-it/lib/rules_inline/state_inline');
-const slugify = require('slugify');
+import slugify from 'slugify';
 
 /**
  * Converts WikiLinks to anchor tags.
- *
- * @param {StateInline} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_inline/state_inline')} state State of MarkdownIt.
  * @returns {boolean} Returns true when able to parse the wikilinks.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.before|Ruler.before}
  */
-function wikilinks(state) {
+export function wikilinks(state) {
   const max = state.posMax;
   let current = state.src.charAt(state.pos);
   let next = state.src.charAt(state.pos + 1);
@@ -82,6 +80,6 @@ function wikilinks(state) {
   return true;
 }
 
-module.exports = {
+export default {
   wikilinks,
 };

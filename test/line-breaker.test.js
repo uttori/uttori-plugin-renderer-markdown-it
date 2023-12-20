@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava').default;
-const MarkdownItRenderer = require('../src');
+import test from 'ava';
+import MarkdownItRenderer from '../src/index.js';
 
 test('MarkdownItRenderer.render(content, config): can render line breaks', (t) => {
   const markdown = 'test<br>one<br />two<br/>three';

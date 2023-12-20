@@ -1,12 +1,9 @@
-const StateCore = require('markdown-it/lib/rules_core/state_core');
-
 /**
  * Converts HTML line breaks or other patterns to line break HTML tags.
- *
- * @param {StateCore} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_core/state_core')} state State of MarkdownIt.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
  */
-function lineBreaker(state) {
+export function lineBreaker(state) {
   let { tokens } = state;
 
   // Loop through all the tokens looking for ones to replace.
@@ -19,7 +16,7 @@ function lineBreaker(state) {
     if (!breakRegExp.test(currentToken.content)) continue;
 
     // Split the parts that need a break between them:
-    const parts = [...currentToken.content.split(breakRegExp)];
+    const parts = currentToken.content.split(breakRegExp);
 
     // Build the tokens
     const nodes = [];
@@ -52,6 +49,6 @@ function lineBreaker(state) {
   }
 }
 
-module.exports = {
+export default {
   lineBreaker,
 };

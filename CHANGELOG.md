@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.0.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.9.0...v5.0.0) - 2023-12-19
+
+- 💥 BREAKING CHANGES!
+- 🎁 Convert to be a module, and require Node v20
+- 🎁 Update dependencies
+- 🎁 Update dev dependencies
+- 🛠 Update ESLint configuration
+- 🛠 Update NVM to v20.10.0
+- 🛠 Update old tooling configuration files
+- 🛠 Remove CJS support, restructure to export ESM only
+- 🛠 Fix `parentType` in the footnote component
+- 🛠 Fix some unnecessary spread operations
+- 🛠 Fix some extreme edge cases where tokens could be undefined or missing `map` & `attrs` arrays
+
 ## [4.9.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.8.0...v4.9.0) - 2023-04-23
 
 - 🧰 Add `MarkdownItRenderer.parse(content, config)` for parsing Markdown to tokens.

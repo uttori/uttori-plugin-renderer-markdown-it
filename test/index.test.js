@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava').default;
-const MarkdownItRenderer = require('../src');
+import test from 'ava';
+import MarkdownItRenderer from '../src/index.js';
 
 test('MarkdownItRenderer.register(context): can register', (t) => {
   t.notThrows(() => {

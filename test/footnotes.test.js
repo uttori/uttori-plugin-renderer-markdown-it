@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava').default;
-const MarkdownItRenderer = require('../src');
+import test from 'ava';
+import MarkdownItRenderer from '../src/markdown-it-renderer.js';
 
 test('MarkdownItRenderer.render(content, config): can render Footnotes', (t) => {
   const markdown = `Here is footnote-here reference.[^1].
