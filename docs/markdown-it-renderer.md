@@ -6,17 +6,10 @@
 </dd>
 </dl>
 
-## Functions
-
-<dl>
-<dt><a href="#debug">debug()</a> : <code>function</code></dt>
-<dd></dd>
-</dl>
-
 ## Typedefs
 
 <dl>
-<dt><a href="#MarkdownItRendererOptions">MarkdownItRendererOptions</a> : <code>object</code></dt>
+<dt><a href="#MarkdownItRendererOptionsUttori">MarkdownItRendererOptionsUttori</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
@@ -29,14 +22,14 @@ Uttori MarkdownIt Renderer
 
 * [MarkdownItRenderer](#MarkdownItRenderer)
     * [.configKey](#MarkdownItRenderer.configKey) ⇒ <code>string</code>
-    * [.defaultConfig()](#MarkdownItRenderer.defaultConfig) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
-    * [.extendConfig([config])](#MarkdownItRenderer.extendConfig) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
+    * [.defaultConfig()](#MarkdownItRenderer.defaultConfig) ⇒ <code>MarkdownIt.Options</code>
+    * [.extendConfig(config)](#MarkdownItRenderer.extendConfig) ⇒ <code>MarkdownIt.Options</code>
     * [.validateConfig(config, _context)](#MarkdownItRenderer.validateConfig)
     * [.register(context)](#MarkdownItRenderer.register)
     * [.renderContent(content, context)](#MarkdownItRenderer.renderContent) ⇒ <code>string</code>
     * [.renderCollection(collection, context)](#MarkdownItRenderer.renderCollection) ⇒ <code>Array.&lt;object&gt;</code>
     * [.render(content, config)](#MarkdownItRenderer.render) ⇒ <code>string</code>
-    * [.parse(content, config)](#MarkdownItRenderer.parse) ⇒ <code>Array.&lt;Token&gt;</code>
+    * [.parse(content, config)](#MarkdownItRenderer.parse) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
     * [.cleanContent(content)](#MarkdownItRenderer.cleanContent) ⇒ <code>string</code>
     * [.viewModelDetail(viewModel, context)](#MarkdownItRenderer.viewModelDetail) ⇒ <code>object</code>
 
@@ -53,26 +46,26 @@ const config = { ...MarkdownItRenderer.defaultConfig(), ...context.config[Markdo
 ```
 <a name="MarkdownItRenderer.defaultConfig"></a>
 
-### MarkdownItRenderer.defaultConfig() ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
+### MarkdownItRenderer.defaultConfig() ⇒ <code>MarkdownIt.Options</code>
 The default configuration.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
-**Returns**: [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) - The default configuration.  
+**Returns**: <code>MarkdownIt.Options</code> - The default configuration.  
 **Example** *(MarkdownItRenderer.defaultConfig())*  
 ```js
 const config = { ...MarkdownItRenderer.defaultConfig(), ...context.config[MarkdownItRenderer.configKey] };
 ```
 <a name="MarkdownItRenderer.extendConfig"></a>
 
-### MarkdownItRenderer.extendConfig([config]) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
+### MarkdownItRenderer.extendConfig(config) ⇒ <code>MarkdownIt.Options</code>
 Create a config that is extended from the default config.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
-**Returns**: [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) - The new configration.  
+**Returns**: <code>MarkdownIt.Options</code> - The new configration.  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [config] | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | <code>{}</code> | The user provided configuration. |
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>MarkdownIt.Options</code> | The user provided configuration. |
 
 <a name="MarkdownItRenderer.validateConfig"></a>
 
@@ -83,8 +76,7 @@ Validates the provided configuration for required entries.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>object</code> | A configuration object. |
-| config.configKey | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A configuration object specifically for this plugin. |
+| config | <code>Record.&lt;string, MarkdownIt.Options&gt;</code> | A provided configuration to use. |
 | _context | <code>object</code> | Unused |
 
 **Example** *(MarkdownItRenderer.validateConfig(config, _context))*  
@@ -103,8 +95,7 @@ Register the plugin with a provided set of events on a provided Hook system.
 | context | <code>object</code> | A Uttori-like context. |
 | context.hooks | <code>object</code> | An event system / hook system to use. |
 | context.hooks.on | <code>function</code> | An event registration function. |
-| context.config | <code>object</code> | A provided configuration to use. |
-| context.config.events | <code>object</code> | An object whose keys correspong to methods, and contents are events to listen for. |
+| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.register(context))*  
 ```js
@@ -137,7 +128,7 @@ Renders Markdown for a provided string with a provided context.
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>object</code> | A provided configuration to use. |
+| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.renderContent(content, context))*  
 ```js
@@ -162,7 +153,7 @@ Renders Markdown for a collection of Uttori documents with a provided context.
 | --- | --- | --- |
 | collection | <code>Array.&lt;object&gt;</code> | A collection of Uttori documents. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>object</code> | A provided configuration to use. |
+| context.config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.renderCollection(collection, context))*  
 ```js
@@ -186,7 +177,7 @@ Renders Markdown for a provided string with a provided MarkdownIt configuration.
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
-| config | <code>object</code> | A provided MarkdownIt configuration to use. |
+| config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.render(content, config))*  
 ```js
@@ -194,17 +185,17 @@ const html = MarkdownItRenderer.render(content, config);
 ```
 <a name="MarkdownItRenderer.parse"></a>
 
-### MarkdownItRenderer.parse(content, config) ⇒ <code>Array.&lt;Token&gt;</code>
+### MarkdownItRenderer.parse(content, config) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
 Parse Markdown for a provided string with a provided MarkdownIt configuration.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
-**Returns**: <code>Array.&lt;Token&gt;</code> - The rendered content.  
+**Returns**: <code>Array.&lt;module:markdown-it/lib/token&gt;</code> - The rendered content.  
 **See**: [MarkdownIt.parse](https://markdown-it.github.io/markdown-it/#MarkdownIt.parse)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
-| config | <code>object</code> | A provided MarkdownIt configuration to use. |
+| config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.parse(content, config))*  
 ```js
@@ -235,50 +226,33 @@ Will attempt to extract the table of contents when set to and add it to the view
 | --- | --- | --- |
 | viewModel | <code>object</code> | Markdown content to be converted to HTML. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>object</code> | A provided configuration to use. |
-| context.config.uttori | <code>object</code> | A provided configuration to use. |
-| context.config.uttori.toc | <code>object</code> | A provided configuration to use. |
-| context.config.uttori.toc.extract | <code>boolean</code> | When true, extract the table of contents to the view model from the content. |
+| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.viewModelDetail(viewModel, context))*  
 ```js
 viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
 ```
-<a name="debug"></a>
+<a name="MarkdownItRendererOptionsUttori"></a>
 
-## debug() : <code>function</code>
-**Kind**: global function  
-<a name="MarkdownItRendererOptions"></a>
-
-## MarkdownItRendererOptions : <code>object</code>
+## MarkdownItRendererOptionsUttori : <code>object</code>
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| [html] | <code>boolean</code> | <code>false</code> | Enable HTML tags in source. |
-| [xhtmlOut] | <code>boolean</code> | <code>false</code> | Use '/' to close single tags (<br />). |
-| [breaks] | <code>boolean</code> | <code>false</code> | Convert '\n' in paragraphs into <br>, this is only for full CommonMark compatibility. |
-| [langPrefix] | <code>string</code> | <code>&quot;&#x27;language-&#x27;&quot;</code> | CSS language prefix for fenced blocks. Can be useful for external highlighters. |
-| [linkify] | <code>boolean</code> | <code>false</code> | Autoconvert URL-like text to links. |
-| [typographer] | <code>boolean</code> | <code>false</code> | Enable some language-neutral replacement + quotes beautification. |
-| [quotes] | <code>string</code> | <code>&quot;&#x27;“”‘’&#x27;&quot;</code> | Double + single quotes replacement pairs, when typographer enabled, and smartquotes on. Could be either a String or an Array. For example, you can use '«»„“' for Russian, '„“‚‘' for German, and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp). |
-| [highlight] | <code>function</code> |  | Highlighter function. Should return escaped HTML, or '' if the source string is not changed and should be escaped externally. If result starts with <pre... internal wrapper is skipped. |
-| [events] | <code>object</code> | <code>{}</code> | Events to listen for. |
-| [uttori] | <code>object</code> |  | Custom values for Uttori specific use. |
-| [uttori.baseUrl] | <code>string</code> | <code>&quot;&#x27;&#x27;&quot;</code> | Prefix for relative URLs, useful when the Express app is not at URI root. |
-| [uttori.allowedExternalDomains] | <code>Array.&lt;string&gt;</code> | <code>[]</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
-| [uttori.openNewWindow] | <code>boolean</code> | <code>true</code> | Open external domains in a new window. |
-| [uttori.lazyImages] | <code>boolean</code> | <code>true</code> | Add lazy loading params to image tags. |
-| [uttori.footnotes] | <code>object</code> | <code>{}</code> | Footnote settings. |
-| [uttori.footnotes.referenceTag] | <code>function</code> |  | A funciton to return the default HTML for a footnote reference. |
-| [uttori.footnotes.definitionOpenTag] | <code>function</code> |  | A funciton to return the default opening HTML for a footnote definition. |
-| [uttori.footnotes.definitionCloseTag] | <code>string</code> | <code>&quot;&#x27;&lt;/div&gt;\\n&#x27;&quot;</code> | The default closing HTML for a footnote definition. |
-| [uttori.toc] | <code>object</code> | <code>{}</code> | Table of Contents settings. |
-| [uttori.toc.extract] | <code>boolean</code> | <code>false</code> | When true, extract the table of contents to the view model from the content. |
-| [uttori.toc.openingTag] | <code>string</code> | <code>&quot;&#x27;&lt;nav class&amp;#61;\&quot;table-of-contents\&quot;&gt;&#x27;&quot;</code> | The opening DOM tag for the TOC container. |
-| [uttori.toc.closingTag] | <code>string</code> | <code>&quot;&#x27;&lt;/nav&gt;&#x27;&quot;</code> | The closing DOM tag for the TOC container. |
-| [uttori.toc.slugify] | <code>object</code> | <code>{ lower: true }</code> | Slugify options for convering headings to anchor links. |
-| [uttori.wikilinks] | <code>object</code> | <code>{}</code> | WikiLinks settings. |
-| [uttori.wikilinks.slugify] | <code>object</code> | <code>{ lower: true }</code> | Slugify options for convering Wikilinks to anchor links. |
+| Name | Type | Description |
+| --- | --- | --- |
+| baseUrl | <code>string</code> | Prefix for relative URLs, useful when the Express app is not at URI root. |
+| allowedExternalDomains | <code>Array.&lt;string&gt;</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
+| openNewWindow | <code>boolean</code> | Open external domains in a new window. |
+| lazyImages | <code>boolean</code> | Add lazy loading params to image tags. |
+| footnotes | <code>object</code> | Footnote settings. |
+| footnotes.referenceTag | <code>function</code> | A funciton to return the default HTML for a footnote reference. |
+| footnotes.definitionOpenTag | <code>function</code> | A funciton to return the default opening HTML for a footnote definition. |
+| footnotes.definitionCloseTag | <code>string</code> | The default closing HTML for a footnote definition. |
+| toc | <code>object</code> | Table of Contents settings. |
+| toc.extract | <code>boolean</code> | When true, extract the table of contents to the view model from the content. |
+| toc.openingTag | <code>string</code> | The opening DOM tag for the TOC container. |
+| toc.closingTag | <code>string</code> | The closing DOM tag for the TOC container. |
+| toc.slugify | <code>object</code> | Slugify options for convering headings to anchor links. |
+| wikilinks | <code>object</code> | WikiLinks settings. |
+| wikilinks.slugify | <code>object</code> | Slugify options for convering Wikilinks to anchor links. |
 
