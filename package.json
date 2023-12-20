@@ -5,7 +5,10 @@
   "author": "Matthew Callis <matthew.callis@gmail.com>",
   "contributors": [],
   "license": "MIT",
-  "repository": "uttori/uttori-plugin-renderer-markdown-it",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uttori/uttori-plugin-renderer-markdown-it.git"
+  },
   "homepage": "https://github.com/uttori/uttori-plugin-renderer-markdown-it",
   "keywords": [
     "uttori",
@@ -15,67 +18,62 @@
     "markdown-it-plugin"
   ],
   "engines": {
-    "node": ">= 12"
+    "node": ">= 20"
   },
   "dependencies": {
-    "markdown-it": "^13.0.1",
+    "markdown-it": "^14.0.0",
     "slugify": "^1.6.6"
   },
   "optionalDependencies": {
     "debug": "^4.3.4"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.21.3",
-    "@typescript-eslint/parser": "^5.59.0",
-    "ava": "^5.2.0",
-    "c8": "^7.13.0",
-    "eslint": "^8.39.0",
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "ava": "^6.0.1",
+    "c8": "^8.0.1",
+    "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-anti-trojan-source": "^1.1.1",
     "eslint-plugin-ava": "^14.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsdoc": "^43.0.7",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsdoc": "^46.9.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-n": "^16.4.0",
+    "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
-    "eslint-plugin-ramda": "^2.5.1",
-    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-security": "^1.7.1",
+    "eslint-plugin-security": "^2",
+    "eslint-plugin-sonarjs": "^0.23.0",
     "eslint-plugin-xss": "^0.1.12",
     "jsdoc": "^4.0.2",
     "jsdoc-to-markdown": "^8.0.0",
+    "jsdoc-tsimport-plugin": "^1.0.5",
     "pre-commit": "^1.2.2",
-    "release-it": "^15.10.1",
-    "typescript": "^5.0.4"
+    "release-it": "^17.0.1",
+    "typescript": "^5.3.3"
   },
   "files": [
-    "esm/*",
-    "src/*",
-    "types/*"
+    "dist/*",
+    "src/*"
   ],
-  "main": "src/index.js",
-  "module": "esm/index.js",
-  "types": "types/index.d.ts",
-  "typings": "types/index.d.ts",
+  "module": "src/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "require": "./src/index.js",
-      "import": "./esm/index.js"
+      "import": "./src/index.js"
     },
     "./markdown-it-plugin": {
-      "types": "./types/index.d.ts",
-      "require": "./src/markdown-it-plugin.js"
+      "import": "./src/markdown-it-plugin.js"
     }
   },
   "ava": {
     "files": [
       "test/**/*.test.js"
-    ],
-    "ignoredByWatcher": [
-      "!src/**/*.js"
     ],
     "concurrency": 1,
     "failFast": false,
@@ -95,11 +93,10 @@
     }
   },
   "scripts": {
-    "docs": "jsdoc2md --private --example-lang js --template rm.hbs --files src/index.js > README.md; jsdoc2md --private --example-lang js --files src/index.js > docs/render-markdownit.md; jsdoc2md --private --example-lang js --files src/markdown-it-plugin.js > docs/markdown-it-plugin.md",
+    "docs": "jsdoc2md --configure ./jsdoc.conf.json --private --example-lang js --template rm.hbs --files src/markdown-it-renderer.js > README.md; jsdoc2md --configure ./jsdoc.conf.json --private --example-lang js --files src/markdown-it-renderer.js > docs/markdown-it-renderer.md; jsdoc2md --configure ./jsdoc.conf.json --private --example-lang js --files src/markdown-it-plugin.js > docs/markdown-it-plugin.md",
     "lint": "eslint .",
-    "make-types": "rm -fr types/ && mkdir types && tsc --project .tsconfig.json",
+    "make-types": "tsc --checkJs false --module nodenext --project ./.tsconfig.json",
     "release": "release-it",
-    "report": "c8 report --reporter=html",
     "test": "NODE_ENV=test c8 ava",
     "test-debug": "DEBUG=Uttori* NODE_ENV=test ava --serial --concurrency=1",
     "validate": "npm ls"
