@@ -1,67 +1,61 @@
-const StateCore = require('markdown-it/lib/rules_core/state_core');
-const StateInline = require('markdown-it/lib/rules_inline/state_inline');
-const Renderer = require('markdown-it/lib/renderer');
-const Token = require('markdown-it/lib/token');
-const slugify = require('slugify');
+import MarkdownIt from 'markdown-it';
+import slugify from 'slugify';
 
 /**
  * Adds deep links to the opening of the heading tags with IDs.
- *
- * @param {Token[]} tokens Collection of tokens.
+ * @param {import('markdown-it/lib/token')[]} tokens Collection of tokens.
  * @param {number} index The index of the current token in the Tokens array.
- * @param {object} options The options for the current MarkdownIt instance.
+ * @param {MarkdownIt.Options} options The options for the current MarkdownIt instance.
  * @returns {string} The modified header tag with ID.
  */
-function headingOpen(tokens, index, options) {
+export function headingOpen(tokens, index, options) {
   // The opening tag itself (#, ##, etc.)
   const { tag } = tokens[index];
   // The text content inside of that tag (# Heading, Heading in this example)
   const label = tokens[index + 1];
   // Guard against empty headers
-  if (label.type === 'inline' && label.children.length > 0) {
+  if (label.type === 'inline' && Array.isArray(label.children) && label.children.length > 0) {
     // We want to use slugify to provide nicer deep links
     const slug = slugify(label.content, options.uttori.toc.slugify);
     // Return the new tag HTML
-    return `<${tag} id="${slug}-${label.map[0]}">`;
+    const id = `${slug}-${label.map ? label.map[0] : 'MISSING_MAP'}`;
+    return `<${tag} id="${id}">`;
   }
   return `<${tag}>`;
 }
 
 /**
  * Creates the opening tag of the TOC.
- *
- * @param {Token[]} _tokens Collection of tokens.
+ * @param {import('markdown-it/lib/token')[]} _tokens Collection of tokens.
  * @param {number} _index The index of the current token in the Tokens array.
  * @param {object} options The options for the current MarkdownIt instance.
  * @returns {string} The opening tag of the TOC.
  */
-function tocOpen(_tokens, _index, options) {
+export function tocOpen(_tokens, _index, options) {
   return options.uttori.toc.openingTag;
 }
 
 /**
  * Creates the closing tag of the TOC.
- *
- * @param {Token[]} _tokens Collection of tokens.
+ * @param {import('markdown-it/lib/token')[]} _tokens Collection of tokens.
  * @param {number} _index The index of the current token in the Tokens array.
  * @param {object} options The options for the current MarkdownIt instance.
  * @returns {string} The closing tag of the TOC.
  */
-function tocClose(_tokens, _index, options) {
+export function tocClose(_tokens, _index, options) {
   return options.uttori.toc.closingTag;
 }
 
 /**
  * Creates the contents of the TOC.
- *
- * @param {Token[]} _tokens Collection of tokens.
+ * @param {import('markdown-it/lib/token')[]} _tokens Collection of tokens.
  * @param {number} _index The index of the current token in the Tokens array.
  * @param {object} options Option parameters of the parser instance.
  * @param {object} env Additional data from parsed input (the toc_headings, for example).
- * @param {Renderer} _slf The current parser instance.
+ * @param {import('markdown-it/lib/renderer')} _slf The current parser instance.
  * @returns {string} The contents tag of the TOC.
  */
-function tocBody(_tokens, _index, options, env, _slf) {
+export function tocBody(_tokens, _index, options, env, _slf) {
   let indent_level = 0;
 
   // Reduce the headers down into a string of the TOC
@@ -104,12 +98,11 @@ function tocBody(_tokens, _index, options, env, _slf) {
 
 /**
  * Find and replace the TOC tag with the TOC itself.
- *
- * @param {StateInline} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_inline/state_inline')} state State of MarkdownIt.
  * @returns {boolean} Returns true when able to parse a TOC.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
  */
-function tocRule(state) {
+export function tocRule(state) {
   // If the token does not start with `[` it cannot be `[toc]`
   if (state.src.charCodeAt(state.pos) !== 0x5B) {
     return false;
@@ -136,10 +129,9 @@ function tocRule(state) {
 
 /**
  * Caches the headers for use in building the TOC body.
- *
- * @param {StateCore} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_core/state_core')} state State of MarkdownIt.
  */
-function collectHeaders(state) {
+export function collectHeaders(state) {
   // Create a mapping of all the headers, their indentation level, content and slug.
   state.env.toc_headings = state.env.toc_headings || [];
   state.tokens.forEach((token, i, tokens) => {
@@ -147,7 +139,7 @@ function collectHeaders(state) {
       const inline = tokens[i - 1];
       state.env.toc_headings.push({
         content: inline.content,
-        index: inline.map[0],
+        index: inline.map ? inline.map[0] : 'MISSING_MAP',
         level: Number.parseInt(token.tag.slice(1, 2), 10),
         slug: slugify(inline.content, state.md.options.uttori.toc.slugify),
       });
@@ -155,7 +147,7 @@ function collectHeaders(state) {
   });
 }
 
-module.exports = {
+export default {
   headingOpen,
   tocOpen,
   tocClose,

@@ -1,13 +1,14 @@
-const StateCore = require('markdown-it/lib/rules_core/state_core');
-const Token = require('markdown-it/lib/token');
-
 /**
- * @param {Token} token The MarkdownIt token we are reading.
+ * @param {import('markdown-it/lib/token')} token The MarkdownIt token we are reading.
  * @param {string} key The key is the attribute name, like `src` or `href`.
  * @returns {*|undefined} The read value or undefined.
  */
-function getValue(token, key) {
+export function getValue(token, key) {
   let value;
+  /* c8 ignore next 3 */
+  if (!token.attrs) {
+    token.attrs = [];
+  }
   token.attrs.forEach((attribute) => {
     // Parameter is set, read it.
     if (attribute[0] === key) {
@@ -20,12 +21,16 @@ function getValue(token, key) {
 }
 
 /**
- * @param {Token} token The MarkdownIt token we are updating.
+ * @param {import('markdown-it/lib/token')} token The MarkdownIt token we are updating.
  * @param {string} key The key is the attribute name, like `src` or `href`.
  * @param {string} value The value we want to set to the provided key.
  */
-function updateValue(token, key, value) {
+export function updateValue(token, key, value) {
   let found;
+  /* c8 ignore next 3 */
+  if (!token.attrs) {
+    token.attrs = [];
+  }
   token.attrs.forEach((attribute) => {
     // Parameter is set, change it.
     if (attribute[0] === key) {
@@ -42,11 +47,10 @@ function updateValue(token, key, value) {
 /**
  * Uttori specific rules for manipulating the markup.
  * External Domains are filtered for SEO and security.
- *
- * @param {StateCore} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_core/state_core')} state State of MarkdownIt.
  * @returns {boolean} Returns if parsing was successful or not.
  */
-function uttoriInline(state) {
+export function uttoriInline(state) {
   state.tokens.forEach((blockToken) => {
     if (blockToken.type === 'inline' && blockToken.children) {
       // https://markdown-it.github.io/markdown-it/#Token
@@ -85,7 +89,7 @@ function uttoriInline(state) {
                 // eslint-disable-next-line no-lonely-if
                 if (state.md.options?.uttori?.baseUrl) {
                   // Check for opening slash
-                  updateValue(token, 'href', `${state.md.options.uttori.baseUrl}${href.startsWith('/') ? href : `/${href}`}`);
+                  updateValue(token, 'href', `${state.md.options.uttori.baseUrl}/${href.startsWith('/') ? href.substring(1) : href}`);
                 }
               }
             }
@@ -101,7 +105,7 @@ function uttoriInline(state) {
   return false;
 }
 
-module.exports = {
+export default {
   getValue,
   updateValue,
   uttoriInline,

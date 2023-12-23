@@ -1,12 +1,17 @@
-const StateCore = require('markdown-it/lib/rules_core/state_core');
-
+/**
+ * @typedef {object} YoutubeTagAttributes
+ * @property {string} v Video ID
+ * @property {string} width Iframe width attribute
+ * @property {string} height Iframe height attribute
+ * @property {string} title Iframe title attribute
+ * @property {string} start Video start offset time in seconds
+ */
 /**
  * Find and replace the <youtube> tags with safe iframes.
- *
- * @param {StateCore} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_core/state_core')} state State of MarkdownIt.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
  */
-function youtube(state) {
+export function youtube(state) {
   let { tokens } = state;
 
   // Loop through all the tokens looking for ones to replace.
@@ -22,12 +27,12 @@ function youtube(state) {
     // <youtube v="XG9dCoTlJYA" start="0" width="560" height="315" title="YouTube Video Player" start="0">
     // eslint-disable-next-line security/detect-unsafe-regex
     const parts = [...currentToken.content.matchAll(/\s+(v|start|width|height|title)=('[^']*'|"[^"]*")?/g)];
-    /** @type {{[key: string]: string}} */
+    /** @type {YoutubeTagAttributes} */
     const keys = parts.reduce((output, item) => {
       output[item[1]] = item[2].replace(/["']+/g, '');
       return output;
-    }, {});
-    const { v = '', width = '560', height = '315', title = '', start = '0' } = keys;
+    }, { v: '', width: '560', height: '315', title: '', start: '0' });
+    const { v, width, height, title, start } = keys;
 
     // Build the tokens
     const nodes = [];
@@ -78,6 +83,6 @@ function youtube(state) {
   }
 }
 
-module.exports = {
+export default {
   youtube,
 };

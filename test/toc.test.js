@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava').default;
-const MarkdownItRenderer = require('../src');
+import test from 'ava';
+import MarkdownItRenderer from '../src/index.js';
 
 test('MarkdownItRenderer.render(content, config): can render a table of contents', (t) => {
   const markdown = '# First\n## Second\n### Third\n### Third Again\n#### Fouth\n\n## Second Again\n### Third Last\nContent\nContent\n[toc]\nContent\nContent';

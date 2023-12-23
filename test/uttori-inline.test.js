@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
-const test = require('ava').default;
-const MarkdownItRenderer = require('../src');
+import test from 'ava';
+import MarkdownItRenderer from '../src/index.js';
 
 test('MarkdownItRenderer.render(content, config): prepends the baseURL when set', (t) => {
   t.is(MarkdownItRenderer.render('[Test]', { uttori: { baseUrl: '/wiki' } }), '<p>[Test]</p>');

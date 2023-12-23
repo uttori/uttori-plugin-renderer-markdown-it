@@ -1,19 +1,15 @@
-const Renderer = require('markdown-it/lib/renderer');
-const StateBlock = require('markdown-it/lib/rules_block/state_block');
-const StateInline = require('markdown-it/lib/rules_inline/state_inline');
-const Token = require('markdown-it/lib/token');
+import MarkdownIt from 'markdown-it';
 
 /**
  * Converts Footnote definitions to linkable anchor tags.
- *
- * @param {StateBlock} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_block/state_block')} state State of MarkdownIt.
  * @param {number} startLine The starting line of the block.
  * @param {number} endLine The ending line of the block.
  * @param {boolean} silent Used to validating parsing without output in MarkdownIt.
  * @returns {boolean} Returns if parsing was successful or not.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.before|Ruler.before}
  */
-function footnoteDefinition(state, startLine, endLine, silent) {
+export function footnoteDefinition(state, startLine, endLine, silent) {
   const start = state.bMarks[startLine] + state.tShift[startLine];
   const max = state.eMarks[startLine];
 
@@ -92,7 +88,7 @@ function footnoteDefinition(state, startLine, endLine, silent) {
   state.sCount[startLine] = offset - initial;
   state.bMarks[startLine] = posAfterColon;
   state.blkIndent += 4;
-  state.parentType = 'footnote';
+  state.parentType = 'root';
 
   // Ensure the block indentation is maintained for the footnote content.
   if (state.sCount[startLine] < state.blkIndent) {
@@ -119,13 +115,12 @@ function footnoteDefinition(state, startLine, endLine, silent) {
 
 /**
  * Converts Footnote definitions to linkable anchor tags.
- *
- * @param {StateInline} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_inline/state_inline')} state State of MarkdownIt.
  * @param {boolean} silent Used to validating parsing without output in MarkdownIt.
  * @returns {boolean} Returns if parsing was successful or not.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
  */
-function footnoteReferences(state, silent) {
+export function footnoteReferences(state, silent) {
   const max = state.posMax;
   const start = state.pos;
 
@@ -175,70 +170,65 @@ function footnoteReferences(state, silent) {
 
 /**
  * Default configuration for rendering footnote references.
- *
  * @param {object} token The MarkdownIt Token meta object.
  * @param {number} token.id The ID of the current footnote.
  * @param {string} token.label The label of the current footnote.
  * @returns {string} The HTML markup for the current footnote reference.
  */
-function referenceTag({ id, label }) {
+export function referenceTag({ id, label }) {
   return `<sup class="footnote-reference"><a href="#footnote-definition-${id}" aria-describedby="footnote-definition-${id}" id="footnote-${id}">[${label}]</a></sup>`;
 }
 /**
  * Default configuration for rendering footnote definitions.
- *
  * @param {object} token The MarkdownIt Token meta object.
  * @param {number} token.id The ID of the current footnote.
  * @param {string} token.label The label of the current footnote.
  * @returns {string} The HTML markup for the current footnote definition.
  */
-function definitionOpenTag({ id, label }) {
+export function definitionOpenTag({ id, label }) {
   return `<div id="footnote-definition-${id}" class="footnote-definition"><span class="footnote-id">${label}:</span>`;
 }
 
 /**
  * Creates the tag for the Footnote reference.
- *
- * @param {Token[]} tokens Collection of tokens to render.
+ * @param {import('markdown-it/lib/token')[]} tokens Collection of tokens to render.
  * @param {number} index The index of the current token in the Tokens array.
- * @param {object} options Option parameters of the parser instance.
+ * @param {MarkdownIt.Options} options Option parameters of the parser instance.
  * @param {object} _env Additional data from parsed input (references, for example).
- * @param {Renderer} _slf The current parser instance.
+ * @param {import('markdown-it/lib/renderer')} _slf The current parser instance.
  * @returns {string} The tag for the Footnote reference.
  */
-function configFootnoteReference(tokens, index, options, _env, _slf) {
+export function configFootnoteReference(tokens, index, options, _env, _slf) {
   return options.uttori.footnotes.referenceTag(tokens[index].meta);
 }
 
 /**
  * Creates the opening tag of the Footnote items block.
- *
- * @param {Token[]} tokens Collection of tokens to render.
+ * @param {import('markdown-it/lib/token')[]} tokens Collection of tokens to render.
  * @param {number} index The index of the current token in the Tokens array.
- * @param {object} options Option parameters of the parser instance.
+ * @param {MarkdownIt.Options} options Option parameters of the parser instance.
  * @param {object} _env Additional data from parsed input (references, for example).
- * @param {Renderer} _slf The current parser instance.
+ * @param {import('markdown-it/lib/renderer')} _slf The current parser instance.
  * @returns {string} The opening tag of the Footnote items block.
  */
-function configFootnoteOpen(tokens, index, options, _env, _slf) {
+export function configFootnoteOpen(tokens, index, options, _env, _slf) {
   return options.uttori.footnotes.definitionOpenTag(tokens[index].meta);
 }
 
 /**
  * Creates the closing tag of the Footnote items block.
- *
- * @param {Token[]} _tokens Collection of tokens to render.
+ * @param {import('markdown-it/lib/token')[]} _tokens Collection of tokens to render.
  * @param {number} _index The index of the current token in the Tokens array.
- * @param {object} options Option parameters of the parser instance.
+ * @param {MarkdownIt.Options} options Option parameters of the parser instance.
  * @param {object} _env Additional data from parsed input (references, for example).
- * @param {Renderer} _slf The current parser instance.
+ * @param {import('markdown-it/lib/renderer')} _slf The current parser instance.
  * @returns {string} The closing tag of the Footnote section block.
  */
-function configFootnoteClose(_tokens, _index, options, _env, _slf) {
+export function configFootnoteClose(_tokens, _index, options, _env, _slf) {
   return options.uttori.footnotes.definitionCloseTag;
 }
 
-module.exports = {
+export default {
   footnoteDefinition,
   footnoteReferences,
   referenceTag,

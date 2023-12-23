@@ -1,12 +1,9 @@
-const StateCore = require('markdown-it/lib/rules_core/state_core');
-
 /**
  * Find and replace the <video> tags with safe <video> tags.
- *
- * @param {StateCore} state State of MarkdownIt.
+ * @param {import('markdown-it/lib/rules_core/state_core')} state State of MarkdownIt.
  * @see {@link https://markdown-it.github.io/markdown-it/#Ruler.after|Ruler.after}
  */
-function video(state) {
+export function video(state) {
   let { tokens } = state;
 
   // Loop through all the tokens looking for ones to replace.
@@ -91,6 +88,6 @@ function video(state) {
   }
 }
 
-module.exports = {
+export default {
   video,
 };
