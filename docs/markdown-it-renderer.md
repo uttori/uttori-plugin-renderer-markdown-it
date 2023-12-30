@@ -9,7 +9,7 @@
 ## Typedefs
 
 <dl>
-<dt><a href="#MarkdownItRendererOptionsUttori">MarkdownItRendererOptionsUttori</a> : <code>object</code></dt>
+<dt><a href="#MarkdownItRendererOptions">MarkdownItRendererOptions</a> : <code>object</code></dt>
 <dd></dd>
 </dl>
 
@@ -22,14 +22,14 @@ Uttori MarkdownIt Renderer
 
 * [MarkdownItRenderer](#MarkdownItRenderer)
     * [.configKey](#MarkdownItRenderer.configKey) ⇒ <code>string</code>
-    * [.defaultConfig()](#MarkdownItRenderer.defaultConfig) ⇒ <code>MarkdownIt.Options</code>
-    * [.extendConfig(config)](#MarkdownItRenderer.extendConfig) ⇒ <code>MarkdownIt.Options</code>
+    * [.defaultConfig()](#MarkdownItRenderer.defaultConfig) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
+    * [.extendConfig(config)](#MarkdownItRenderer.extendConfig) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
     * [.validateConfig(config, _context)](#MarkdownItRenderer.validateConfig)
     * [.register(context)](#MarkdownItRenderer.register)
     * [.renderContent(content, context)](#MarkdownItRenderer.renderContent) ⇒ <code>string</code>
     * [.renderCollection(collection, context)](#MarkdownItRenderer.renderCollection) ⇒ <code>Array.&lt;object&gt;</code>
-    * [.render(content, config)](#MarkdownItRenderer.render) ⇒ <code>string</code>
-    * [.parse(content, config)](#MarkdownItRenderer.parse) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
+    * [.render(content, [config])](#MarkdownItRenderer.render) ⇒ <code>string</code>
+    * [.parse(content, [config])](#MarkdownItRenderer.parse) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
     * [.cleanContent(content)](#MarkdownItRenderer.cleanContent) ⇒ <code>string</code>
     * [.viewModelDetail(viewModel, context)](#MarkdownItRenderer.viewModelDetail) ⇒ <code>object</code>
 
@@ -46,26 +46,26 @@ const config = { ...MarkdownItRenderer.defaultConfig(), ...context.config[Markdo
 ```
 <a name="MarkdownItRenderer.defaultConfig"></a>
 
-### MarkdownItRenderer.defaultConfig() ⇒ <code>MarkdownIt.Options</code>
+### MarkdownItRenderer.defaultConfig() ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
 The default configuration.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
-**Returns**: <code>MarkdownIt.Options</code> - The default configuration.  
+**Returns**: [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) - The default configuration.  
 **Example** *(MarkdownItRenderer.defaultConfig())*  
 ```js
 const config = { ...MarkdownItRenderer.defaultConfig(), ...context.config[MarkdownItRenderer.configKey] };
 ```
 <a name="MarkdownItRenderer.extendConfig"></a>
 
-### MarkdownItRenderer.extendConfig(config) ⇒ <code>MarkdownIt.Options</code>
+### MarkdownItRenderer.extendConfig(config) ⇒ [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions)
 Create a config that is extended from the default config.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
-**Returns**: <code>MarkdownIt.Options</code> - The new configration.  
+**Returns**: [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) - The new configration.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>MarkdownIt.Options</code> | The user provided configuration. |
+| config | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | The user provided configuration. |
 
 <a name="MarkdownItRenderer.validateConfig"></a>
 
@@ -76,7 +76,7 @@ Validates the provided configuration for required entries.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>Record.&lt;string, MarkdownIt.Options&gt;</code> | A provided configuration to use. |
+| config | <code>Record.&lt;string, MarkdownItRendererOptions&gt;</code> | A provided configuration to use. |
 | _context | <code>object</code> | Unused |
 
 **Example** *(MarkdownItRenderer.validateConfig(config, _context))*  
@@ -95,7 +95,7 @@ Register the plugin with a provided set of events on a provided Hook system.
 | context | <code>object</code> | A Uttori-like context. |
 | context.hooks | <code>object</code> | An event system / hook system to use. |
 | context.hooks.on | <code>function</code> | An event registration function. |
-| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
+| context.config | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.register(context))*  
 ```js
@@ -128,7 +128,7 @@ Renders Markdown for a provided string with a provided context.
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
+| context.config | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.renderContent(content, context))*  
 ```js
@@ -153,7 +153,7 @@ Renders Markdown for a collection of Uttori documents with a provided context.
 | --- | --- | --- |
 | collection | <code>Array.&lt;object&gt;</code> | A collection of Uttori documents. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
+| context.config | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.renderCollection(collection, context))*  
 ```js
@@ -168,7 +168,7 @@ MarkdownItRenderer.renderCollection(collection, context);
 ```
 <a name="MarkdownItRenderer.render"></a>
 
-### MarkdownItRenderer.render(content, config) ⇒ <code>string</code>
+### MarkdownItRenderer.render(content, [config]) ⇒ <code>string</code>
 Renders Markdown for a provided string with a provided MarkdownIt configuration.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
@@ -177,7 +177,7 @@ Renders Markdown for a provided string with a provided MarkdownIt configuration.
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
-| config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
+| [config] | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.render(content, config))*  
 ```js
@@ -185,7 +185,7 @@ const html = MarkdownItRenderer.render(content, config);
 ```
 <a name="MarkdownItRenderer.parse"></a>
 
-### MarkdownItRenderer.parse(content, config) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
+### MarkdownItRenderer.parse(content, [config]) ⇒ <code>Array.&lt;module:markdown-it/lib/token&gt;</code>
 Parse Markdown for a provided string with a provided MarkdownIt configuration.
 
 **Kind**: static method of [<code>MarkdownItRenderer</code>](#MarkdownItRenderer)  
@@ -195,7 +195,7 @@ Parse Markdown for a provided string with a provided MarkdownIt configuration.
 | Param | Type | Description |
 | --- | --- | --- |
 | content | <code>string</code> | Markdown content to be converted to HTML. |
-| config | <code>MarkdownIt.Options</code> | A provided MarkdownIt configuration to use. |
+| [config] | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided MarkdownIt configuration to use. |
 
 **Example** *(MarkdownItRenderer.parse(content, config))*  
 ```js
@@ -226,15 +226,15 @@ Will attempt to extract the table of contents when set to and add it to the view
 | --- | --- | --- |
 | viewModel | <code>object</code> | Markdown content to be converted to HTML. |
 | context | <code>object</code> | A Uttori-like context. |
-| context.config | <code>MarkdownIt.Options</code> | A provided configuration to use. |
+| context.config | [<code>MarkdownItRendererOptions</code>](#MarkdownItRendererOptions) | A provided configuration to use. |
 
 **Example** *(MarkdownItRenderer.viewModelDetail(viewModel, context))*  
 ```js
 viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
 ```
-<a name="MarkdownItRendererOptionsUttori"></a>
+<a name="MarkdownItRendererOptions"></a>
 
-## MarkdownItRendererOptionsUttori : <code>object</code>
+## MarkdownItRendererOptions : <code>object</code>
 **Kind**: global typedef  
 **Properties**
 
@@ -242,6 +242,7 @@ viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);
 | --- | --- | --- |
 | baseUrl | <code>string</code> | Prefix for relative URLs, useful when the Express app is not at URI root. |
 | allowedExternalDomains | <code>Array.&lt;string&gt;</code> | Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org). |
+| disableValidation | <code>boolean</code> | Optionally disable the built in Markdown-It link validation, large security risks when link validation is disabled. |
 | openNewWindow | <code>boolean</code> | Open external domains in a new window. |
 | lazyImages | <code>boolean</code> | Add lazy loading params to image tags. |
 | footnotes | <code>object</code> | Footnote settings. |

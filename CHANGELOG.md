@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.1.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v5.0.0...v5.1.0) - 2023-12-29
+
+- 🧰 Add `disableValidation` option to disable validation of data-uri links and images.
+- 🎁 Update dev dependencies
+- 🛠 Fix some type issues
+
 ## [5.0.0](https://github.com/uttori/uttori-plugin-renderer-markdown-it/compare/v4.9.0...v5.0.0) - 2023-12-19
 
 - 💥 BREAKING CHANGES!

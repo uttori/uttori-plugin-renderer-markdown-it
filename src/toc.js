@@ -1,11 +1,10 @@
-import MarkdownIt from 'markdown-it';
 import slugify from 'slugify';
 
 /**
  * Adds deep links to the opening of the heading tags with IDs.
  * @param {import('markdown-it/lib/token')[]} tokens Collection of tokens.
  * @param {number} index The index of the current token in the Tokens array.
- * @param {MarkdownIt.Options} options The options for the current MarkdownIt instance.
+ * @param {import('./markdown-it-renderer').MarkdownItRendererOptionsUttori} options The options for the current MarkdownIt instance.
  * @returns {string} The modified header tag with ID.
  */
 export function headingOpen(tokens, index, options) {

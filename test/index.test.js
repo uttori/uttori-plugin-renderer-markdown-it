@@ -146,6 +146,16 @@ test('MarkdownItRenderer.render(content, config): replaces missing links with a 
   t.is(MarkdownItRenderer.render('[CrAzY CaSe SpAcEd]()'), '<p><a href="/crazy-case-spaced">CrAzY CaSe SpAcEd</a></p>');
 });
 
+test('MarkdownItRenderer.render(content, config): works with and without link validation', (t) => {
+  t.is(MarkdownItRenderer.render('![](data:image/gif;base64,R0lGODlhAQABAAAAACw=)'), '<p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""></p>');
+  t.is(MarkdownItRenderer.render("![](data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E)"), '<p>![](data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'/%3E)</p>');
+  t.is(MarkdownItRenderer.render("![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)"), '<p>![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)</p>');
+
+  t.is(MarkdownItRenderer.render('![](data:image/gif;base64,R0lGODlhAQABAAAAACw=)', { uttori: { disableValidation: true } }), '<p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""></p>');
+  t.is(MarkdownItRenderer.render("![](data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E)", { uttori: { disableValidation: true } }), '<p>![](data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\'/%3E)</p>');
+  t.is(MarkdownItRenderer.render("![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)", { uttori: { disableValidation: true } }), '<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=" alt=""></p>');
+});
+
 test('MarkdownItRenderer.parse(content, config): handles empty values', (t) => {
   t.deepEqual(MarkdownItRenderer.parse(''), []);
   t.deepEqual(MarkdownItRenderer.parse(' '), []);
@@ -666,6 +676,152 @@ console.log("Code");
 
   // The tokens aren't actually objects, so parse that out with JSON utilities.
   const parsed = JSON.parse(JSON.stringify(MarkdownItRenderer.parse(markdown, MarkdownItRenderer.defaultConfig())));
+  t.deepEqual(parsed, tokens);
+});
+
+test('MarkdownItRenderer.parse(content, config): works with and without link validation', (t) => {
+  let tokens = [
+    {
+      attrs: null,
+      block: true,
+      children: null,
+      content: '',
+      hidden: false,
+      info: '',
+      level: 0,
+      map: [
+        0,
+        1,
+      ],
+      markup: '',
+      meta: null,
+      nesting: 1,
+      tag: 'p',
+      type: 'paragraph_open',
+    },
+    {
+      attrs: null,
+      block: true,
+      children: [
+        {
+          attrs: null,
+          block: false,
+          children: null,
+          content: '![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)',
+          hidden: false,
+          info: '',
+          level: 0,
+          map: null,
+          markup: '',
+          meta: null,
+          nesting: 0,
+          tag: '',
+          type: 'text',
+        },
+      ],
+      content: '![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)',
+      hidden: false,
+      info: '',
+      level: 1,
+      map: [
+        0,
+        1,
+      ],
+      markup: '',
+      meta: null,
+      nesting: 0,
+      tag: '',
+      type: 'inline',
+    },
+    {
+      attrs: null,
+      block: true,
+      children: null,
+      content: '',
+      hidden: false,
+      info: '',
+      level: 0,
+      map: null,
+      markup: '',
+      meta: null,
+      nesting: -1,
+      tag: 'p',
+      type: 'paragraph_close',
+    },
+  ];
+  let parsed = JSON.parse(JSON.stringify(MarkdownItRenderer.parse("![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)", MarkdownItRenderer.defaultConfig())));
+  t.deepEqual(parsed, tokens);
+
+  tokens = [
+    {
+      attrs: null,
+      block: true,
+      children: null,
+      content: '',
+      hidden: false,
+      info: '',
+      level: 0,
+      map: [
+        0,
+        1,
+      ],
+      markup: '',
+      meta: null,
+      nesting: 1,
+      tag: 'p',
+      type: 'paragraph_open',
+    },
+    {
+      attrs: null,
+      block: true,
+      children: [
+        {
+          attrs: [
+            ['src', 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4='],
+            ['alt', ''],
+          ],
+          block: false,
+          children: [],
+          content: '',
+          hidden: false,
+          info: '',
+          level: 0,
+          map: null,
+          markup: '',
+          meta: null,
+          nesting: 0,
+          tag: 'img',
+          type: 'image',
+        },
+      ],
+      content: '![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)',
+      hidden: false,
+      info: '',
+      level: 1,
+      map: [0, 1],
+      markup: '',
+      meta: null,
+      nesting: 0,
+      tag: '',
+      type: 'inline',
+    },
+    {
+      attrs: null,
+      block: true,
+      children: null,
+      content: '',
+      hidden: false,
+      info: '',
+      level: 0,
+      map: null,
+      markup: '',
+      meta: null,
+      nesting: -1,
+      tag: 'p',
+      type: 'paragraph_close',
+    },
+  ];
+  parsed = JSON.parse(JSON.stringify(MarkdownItRenderer.parse("![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnLz4=)", { uttori: { disableValidation: true } })));
   t.deepEqual(parsed, tokens);
 });
 

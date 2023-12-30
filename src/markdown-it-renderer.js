@@ -12,6 +12,7 @@ try { const { default: d } = await import('debug'); debug = d('Uttori.Plugin.Ren
  * @typedef {object} MarkdownItRendererOptionsUttori
  * @property {string} baseUrl Prefix for relative URLs, useful when the Express app is not at URI root.
  * @property {string[]} allowedExternalDomains Allowed External Domains, if a domain is not in this list, it is set to 'nofollow'. Values should be strings of the hostname portion of the URL object (like example.org).
+ * @property {boolean} disableValidation Optionally disable the built in Markdown-It link validation, large security risks when link validation is disabled.
  * @property {boolean} openNewWindow Open external domains in a new window.
  * @property {boolean} lazyImages Add lazy loading params to image tags.
  * @property {object} footnotes Footnote settings.
@@ -25,6 +26,7 @@ try { const { default: d } = await import('debug'); debug = d('Uttori.Plugin.Ren
  * @property {object} toc.slugify Slugify options for convering headings to anchor links.
  * @property {object} wikilinks WikiLinks settings.
  * @property {object} wikilinks.slugify Slugify options for convering Wikilinks to anchor links.
+ * @typedef {MarkdownIt.Options & Record<'events', Record<string, string[]>> & Record<'uttori', MarkdownItRendererOptionsUttori>} MarkdownItRendererOptions
  */
 
 /**
@@ -48,7 +50,7 @@ class MarkdownItRenderer {
 
   /**
    * The default configuration.
-   * @returns {MarkdownIt.Options} The default configuration.
+   * @returns {MarkdownItRendererOptions} The default configuration.
    * @example <caption>MarkdownItRenderer.defaultConfig()</caption>
    * const config = { ...MarkdownItRenderer.defaultConfig(), ...context.config[MarkdownItRenderer.configKey] };
    * @static
@@ -65,6 +67,7 @@ class MarkdownItRenderer {
       uttori: {
         baseUrl: '',
         allowedExternalDomains: [],
+        disableValidation: false,
         openNewWindow: true,
         lazyImages: true,
         footnotes: {
@@ -92,8 +95,8 @@ class MarkdownItRenderer {
 
   /**
    * Create a config that is extended from the default config.
-   * @param {MarkdownIt.Options} config The user provided configuration.
-   * @returns {MarkdownIt.Options} The new configration.
+   * @param {MarkdownItRendererOptions} config The user provided configuration.
+   * @returns {MarkdownItRendererOptions} The new configration.
    */
   static extendConfig(config = MarkdownItRenderer.defaultConfig()) {
     const base = MarkdownItRenderer.defaultConfig();
@@ -117,7 +120,7 @@ class MarkdownItRenderer {
 
   /**
    * Validates the provided configuration for required entries.
-   * @param {Record<string, MarkdownIt.Options>} config A provided configuration to use.
+   * @param {Record<string, MarkdownItRendererOptions>} config A provided configuration to use.
    * @param {object} _context Unused
    * @example <caption>MarkdownItRenderer.validateConfig(config, _context)</caption>
    * MarkdownItRenderer.validateConfig({ ... });
@@ -142,7 +145,7 @@ class MarkdownItRenderer {
    * @param {object} context A Uttori-like context.
    * @param {object} context.hooks An event system / hook system to use.
    * @param {Function} context.hooks.on An event registration function.
-   * @param {MarkdownIt.Options} context.config A provided configuration to use.
+   * @param {MarkdownItRendererOptions} context.config A provided configuration to use.
    * @example <caption>MarkdownItRenderer.register(context)</caption>
    * const context = {
    *   hooks: {
@@ -185,7 +188,7 @@ class MarkdownItRenderer {
    * Renders Markdown for a provided string with a provided context.
    * @param {string} content Markdown content to be converted to HTML.
    * @param {object} context A Uttori-like context.
-   * @param {MarkdownIt.Options} context.config A provided configuration to use.
+   * @param {MarkdownItRendererOptions} context.config A provided configuration to use.
    * @returns {string} The rendered content.
    * @example <caption>MarkdownItRenderer.renderContent(content, context)</caption>
    * const context = {
@@ -211,7 +214,7 @@ class MarkdownItRenderer {
    * Renders Markdown for a collection of Uttori documents with a provided context.
    * @param {object[]} collection A collection of Uttori documents.
    * @param {object} context A Uttori-like context.
-   * @param {MarkdownIt.Options} context.config A provided MarkdownIt configuration to use.
+   * @param {MarkdownItRendererOptions} context.config A provided MarkdownIt configuration to use.
    * @returns {object[]}} The rendered documents.
    * @example <caption>MarkdownItRenderer.renderCollection(collection, context)</caption>
    * const context = {
@@ -229,7 +232,7 @@ class MarkdownItRenderer {
     if (!context || !context.config || !context.config[MarkdownItRenderer.configKey]) {
       throw new Error('Missing configuration.');
     }
-    /** @type {MarkdownIt.Options} */
+    /** @type {MarkdownItRendererOptions} */
     const config = MarkdownItRenderer.extendConfig(context.config[MarkdownItRenderer.configKey]);
     return collection.map((document) => {
       const html = MarkdownItRenderer.render(document.html, config);
@@ -240,18 +243,21 @@ class MarkdownItRenderer {
   /**
    * Renders Markdown for a provided string with a provided MarkdownIt configuration.
    * @param {string} content Markdown content to be converted to HTML.
-   * @param {MarkdownIt.Options} config A provided MarkdownIt configuration to use.
+   * @param {MarkdownItRendererOptions} [config] A provided MarkdownIt configuration to use.
    * @returns {string} The rendered content.
    * @example <caption>MarkdownItRenderer.render(content, config)</caption>
    * const html = MarkdownItRenderer.render(content, config);
    * @static
    */
-  static render(content, config) {
+  static render(content, config = {}) {
     if (!content) {
       debug('No input provided, returning a blank string.');
       return '';
     }
     const md = new MarkdownIt(config).use(markdownItPlugin);
+    if (config?.uttori?.disableValidation) {
+      md.validateLink = () => true;
+    }
 
     // Clean up the content.
     content = MarkdownItRenderer.cleanContent(content);
@@ -261,20 +267,23 @@ class MarkdownItRenderer {
   /**
    * Parse Markdown for a provided string with a provided MarkdownIt configuration.
    * @param {string} content Markdown content to be converted to HTML.
-   * @param {MarkdownIt.Options} config A provided MarkdownIt configuration to use.
+   * @param {MarkdownItRendererOptions} [config] A provided MarkdownIt configuration to use.
    * @returns {import('markdown-it/lib/token')[]} The rendered content.
    * @example <caption>MarkdownItRenderer.parse(content, config)</caption>
    * const tokens = MarkdownItRenderer.parse(content, config);
    * @see {@link https://markdown-it.github.io/markdown-it/#MarkdownIt.parse|MarkdownIt.parse}
    * @static
    */
-  static parse(content, config) {
+  static parse(content, config = {}) {
     if (!content) {
       debug('No input provided, returning an empty array.');
       return [];
     }
 
     const md = new MarkdownIt(config).use(markdownItPlugin);
+    if (config?.uttori?.disableValidation) {
+      md.validateLink = () => true;
+    }
 
     // Clean up the content.
     content = MarkdownItRenderer.cleanContent(content);
@@ -310,7 +319,7 @@ class MarkdownItRenderer {
    * Will attempt to extract the table of contents when set to and add it to the view model.
    * @param {object} viewModel Markdown content to be converted to HTML.
    * @param {object} context A Uttori-like context.
-   * @param {MarkdownIt.Options} context.config A provided configuration to use.
+   * @param {MarkdownItRendererOptions} context.config A provided configuration to use.
    * @returns {object} The view model.
    * @example <caption>MarkdownItRenderer.viewModelDetail(viewModel, context)</caption>
    * viewModel = MarkdownItRenderer.viewModelDetail(viewModel, context);

@@ -2,10 +2,10 @@
  * Adds deep links to the opening of the heading tags with IDs.
  * @param {import('markdown-it/lib/token')[]} tokens Collection of tokens.
  * @param {number} index The index of the current token in the Tokens array.
- * @param {MarkdownIt.Options} options The options for the current MarkdownIt instance.
+ * @param {import('./markdown-it-renderer').MarkdownItRendererOptionsUttori} options The options for the current MarkdownIt instance.
  * @returns {string} The modified header tag with ID.
  */
-export function headingOpen(tokens: any[], index: number, options: MarkdownIt.Options): string;
+export function headingOpen(tokens: any[], index: number, options: any): string;
 /**
  * Creates the opening tag of the TOC.
  * @param {import('markdown-it/lib/token')[]} _tokens Collection of tokens.
@@ -53,5 +53,4 @@ declare namespace _default {
     export { collectHeaders };
 }
 export default _default;
-import MarkdownIt from 'markdown-it';
 //# sourceMappingURL=toc.d.ts.map
