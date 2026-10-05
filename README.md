@@ -3,6 +3,10 @@
 [![Build Status](https://travis-ci.com/uttori/uttori-plugin-renderer-markdown-it.svg?branch=master)](https://app.travis-ci.com/github/uttori/uttori-plugin-renderer-markdown-it)
 [![Coverage Status](https://coveralls.io/repos/uttori/uttori-plugin-renderer-markdown-it/badge.svg?branch=master)](https://coveralls.io/r/uttori/uttori-plugin-renderer-markdown-it?branch=master)
 
+# Package Moved
+
+This has been added to the core https://github.com/uttori/uttori-wiki package.
+
 # Uttori Renderer - Markdown - MarkdownIt
 
 Uttori renderer support for Markdown powered by [MarkdownIt](https://markdown-it.github.io/).
